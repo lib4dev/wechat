@@ -2,6 +2,8 @@ package wechat
 
 import (
 	"sync"
+
+	"github.com/micro-plat/lib4go/cache"
 )
 
 // WContext struct
@@ -13,6 +15,7 @@ type WContext struct {
 	PayMchID       string
 	PayNotifyURL   string
 	PayKey         string
+	Cache          cache.ICache
 
 	//accessTokenLock 读写锁 同一个AppID一个
 	accessTokenLock *sync.RWMutex

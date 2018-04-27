@@ -10,8 +10,8 @@ import (
 
 	"github.com/micro-plat/hydra/context"
 
-	"github.com/silenceper/wechat/message"
-	"github.com/silenceper/wechat/util"
+	"github.com/micro-plat/wechat/message"
+	"github.com/micro-plat/wechat/util"
 )
 
 //Server struct

@@ -4,7 +4,7 @@ import (
 	"github.com/micro-plat/hydra/context"
 
 	"github.com/micro-plat/wechat"
-	"github.com/silenceper/wechat/message"
+	"github.com/micro-plat/wechat/message"
 )
 
 //处理微信消息
