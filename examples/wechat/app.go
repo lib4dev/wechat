@@ -6,11 +6,16 @@ import (
 	"github.com/asaskevich/govalidator"
 	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/hydra"
-	"github.com/micro-plat/wechat"
+	"github.com/micro-plat/wechat/mp"
 )
 
-//AppConf 应用程序全局配置
+//AppConf 应用程序配置
 type AppConf struct {
+	WX []WXConfig `json:"wx" valid:"required"`
+}
+
+//WXConfig 微信公众号配置
+type WXConfig struct {
 	AppID          string `json:"appid" valid:"ascii,required"`
 	AppSecret      string `json:"secret" valid:"ascii,required"`
 	Token          string `json:"token" valid:"ascii"`
@@ -25,11 +30,13 @@ type AppConf struct {
 func bindConf(app *hydra.MicroApp) {
 	app.Binder.API.SetMainConf(`{"address":":9999"}`)
 	app.Binder.API.SetSubConf("app", `{
-		"appid": "wx9e02ddcc88e13fd4",
-		"secret": "6acb2bf99177524beba3d97d54df2de5",
-		"token":"oTSvVuXdjb9Xx1FPi6bz",
-		"aes-key": "D3mgxDexQDuqHm1MIWsyvhLMd3Y303cmf05JgjD9ZWY",
-		"serve-url": "/"
+		"wx":[{
+			"appid": "wx9e02ddcc88e13fd4",
+			"secret": "6acb2bf99177524beba3d97d54df2de5",
+			"token":"oTSvVuXdjb9Xx1FPi6bz",
+			"aes-key": "D3mgxDexQDuqHm1MIWsyvhLMd3Y303cmf05JgjD9ZWY",
+			"serve-url": "/"
+		}]		
 	}`)
 }
 
@@ -43,22 +50,23 @@ func bind(r *hydra.MicroApp) {
 		if err := c.GetAppConf(&config); err != nil {
 			return err
 		}
-		if b, err := govalidator.ValidateStruct(&config); !b {
+		if b, err := govalidator.ValidateStruct(&config); !b || len(config.WX) == 0 {
 			err = fmt.Errorf("app 配置文件有误:%v", err)
 			return err
 		}
-
-		//创建微信处理服务
-		ctx := &wechat.WContext{
-			AppID:          config.AppID,
-			AppSecret:      config.AppSecret,
-			Token:          config.Token,
-			EncodingAESKey: config.EncodingAESKey,
-			PayMchID:       config.PayMchID,
-			PayNotifyURL:   config.PayNotifyURL,
-			PayKey:         config.PayKey,
+		for _, wx := range config.WX {
+			//创建微信处理服务
+			ctx := &mp.WConf{
+				AppID:          wx.AppID,
+				AppSecret:      wx.AppSecret,
+				Token:          wx.Token,
+				EncodingAESKey: wx.EncodingAESKey,
+				PayMchID:       wx.PayMchID,
+				PayNotifyURL:   wx.PayNotifyURL,
+				PayKey:         wx.PayKey,
+			}
+			r.Micro(wx.ServeURL, mp.NewSeverHandler(ctx, recvMessage))
 		}
-		r.Micro(config.ServeURL, wechat.NewSeverHandler(ctx, recvMessage))
 		return nil
 	})
 }

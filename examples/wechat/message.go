@@ -2,14 +2,18 @@ package main
 
 import (
 	"github.com/micro-plat/hydra/context"
+	"github.com/micro-plat/wechat/mp/message"
 
-	"github.com/micro-plat/wechat"
-	"github.com/micro-plat/wechat/message"
+	"github.com/micro-plat/wechat/mp"
+	"github.com/micro-plat/wechat/mp/core"
 )
 
 //处理微信消息
-func recvMessage(context *wechat.WContext, ctx *context.Context, msg *message.MixMessage) *message.Reply {
+func recvMessage(cnf *mp.WConf, ctx *context.Context, msg *core.MixedMsg) *core.Reply {
 	ctx.Log.Info("-----recv.message-----")
-	ctx.Log.Info(string(msg.Raw))
+	switch msg.EventType {
+	case core.EventSubscribe:
+		return &core.Reply{MsgType: core.MsgTypeText, MsgData: message.NewText("欢迎关注公众号")}
+	}
 	return nil
 }
