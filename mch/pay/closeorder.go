@@ -1,13 +1,13 @@
 package pay
 
 import (
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // CloseOrder 关闭订单.
-func CloseOrder(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/pay/closeorder", req)
+func CloseOrder(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/pay/closeorder", req)
 }
 
 type CloseOrderRequest struct {
@@ -22,7 +22,7 @@ type CloseOrderRequest struct {
 }
 
 // CloseOrder2 关闭订单.
-func CloseOrder2(clt *core.Client, req *CloseOrderRequest) (err error) {
+func CloseOrder2(clt *mch.Client, req *CloseOrderRequest) (err error) {
 	m1 := make(map[string]string, 8)
 	m1["out_trade_no"] = req.OutTradeNo
 	if req.NonceStr != "" {

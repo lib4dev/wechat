@@ -5,13 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	wechatutil "github.com/micro-plat/wechat/util"
 )
 
 // RefundQuery 查询退款.
-func RefundQuery(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/pay/refundquery", req)
+func RefundQuery(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/pay/refundquery", req)
 }
 
 type RefundQueryRequest struct {
@@ -64,7 +64,7 @@ type RefundItem struct {
 
 // RefundQuery2 查询退款.
 //  NOTE: 该函数不支持 代金券 功能, 如果有 代金券 功能请使用 RefundQuery 函数.
-func RefundQuery2(clt *core.Client, req *RefundQueryRequest) (resp *RefundQueryResponse, err error) {
+func RefundQuery2(clt *mch.Client, req *RefundQueryRequest) (resp *RefundQueryResponse, err error) {
 	m1 := make(map[string]string, 16)
 	if req.TransactionId != "" {
 		m1["transaction_id"] = req.TransactionId

@@ -13,9 +13,9 @@ import (
 	"os"
 	"unicode"
 
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 
-	"github.com/micro-plat/wechat/mch/core"
 	wechatutil "github.com/micro-plat/wechat/util"
 )
 
@@ -34,7 +34,7 @@ type DownloadBillRequest struct {
 }
 
 // 下载对账单到到文件.
-func DownloadBill(clt *core.Client, filepath string, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func DownloadBill(clt *mch.Client, filepath string, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if req == nil {
 		return 0, errors.New("nil request req")
 	}
@@ -53,7 +53,7 @@ func DownloadBill(clt *core.Client, filepath string, req *DownloadBillRequest, h
 }
 
 // 下载对账单到 io.Writer.
-func DownloadBillToWriter(clt *core.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func DownloadBillToWriter(clt *mch.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if writer == nil {
 		return 0, errors.New("nil writer")
 	}
@@ -73,7 +73,7 @@ var (
 )
 
 // 下载对账单到 io.Writer.
-func downloadBillToWriter(clt *core.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func downloadBillToWriter(clt *mch.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultMediaHttpClient
 	}
@@ -106,13 +106,13 @@ func downloadBillToWriter(clt *core.Client, writer io.Writer, req *DownloadBillR
 	// 签名
 	switch req.SignType {
 	case "":
-		m1["sign"] = core.Sign2(m1, clt.ApiKey(), md5.New())
-	case core.SignType_MD5:
-		m1["sign_type"] = core.SignType_MD5
-		m1["sign"] = core.Sign2(m1, clt.ApiKey(), md5.New())
-	case core.SignType_HMAC_SHA256:
-		m1["sign_type"] = core.SignType_HMAC_SHA256
-		m1["sign"] = core.Sign2(m1, clt.ApiKey(), hmac.New(sha256.New, []byte(clt.ApiKey())))
+		m1["sign"] = mch.Sign2(m1, clt.ApiKey(), md5.New())
+	case mch.SignType_MD5:
+		m1["sign_type"] = mch.SignType_MD5
+		m1["sign"] = mch.Sign2(m1, clt.ApiKey(), md5.New())
+	case mch.SignType_HMAC_SHA256:
+		m1["sign_type"] = mch.SignType_HMAC_SHA256
+		m1["sign"] = mch.Sign2(m1, clt.ApiKey(), hmac.New(sha256.New, []byte(clt.ApiKey())))
 	default:
 		err = fmt.Errorf("unsupported request sign_type: %s", req.SignType)
 		return 0, err
@@ -125,7 +125,7 @@ func downloadBillToWriter(clt *core.Client, writer io.Writer, req *DownloadBillR
 		return 0, err
 	}
 
-	httpResp, err := httpClient.Post(core.APIBaseURL()+"/pay/downloadbill", "text/xml; charset=utf-8", requestBuffer)
+	httpResp, err := httpClient.Post(mch.APIBaseURL()+"/pay/downloadbill", "text/xml; charset=utf-8", requestBuffer)
 	if err != nil {
 		return 0, err
 	}
@@ -153,7 +153,7 @@ func downloadBillToWriter(clt *core.Client, writer io.Writer, req *DownloadBillR
 			bs = trimLeft(bs[len(downloadBillErrorRootNodeStartElement):])
 			if bytes.HasPrefix(bs, downloadBillErrorReturnCodeNodeStartElement) || bytes.HasPrefix(bs, downloadBillErrorReturnMsgNodeStartElement) {
 				// 可以认为是错误信息了, 尝试解析xml
-				var result core.Error
+				var result mch.Error
 				if err = xml.Unmarshal(content, &result); err == nil {
 					return 0, &result
 				}

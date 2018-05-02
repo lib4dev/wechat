@@ -1,13 +1,13 @@
 package tools
 
 import (
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // AuthCodeToOpenId 授权码查询openid.
-func AuthCodeToOpenId(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/tools/authcodetoopenid", req)
+func AuthCodeToOpenId(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/tools/authcodetoopenid", req)
 }
 
 type AuthCodeToOpenIdRequest struct {
@@ -32,7 +32,7 @@ type AuthCodeToOpenIdResponse struct {
 }
 
 // AuthCodeToOpenId2 授权码查询openid.
-func AuthCodeToOpenId2(clt *core.Client, req *AuthCodeToOpenIdRequest) (resp *AuthCodeToOpenIdResponse, err error) {
+func AuthCodeToOpenId2(clt *mch.Client, req *AuthCodeToOpenIdRequest) (resp *AuthCodeToOpenIdResponse, err error) {
 	m1 := make(map[string]string, 8)
 	m1["auth_code"] = req.AuthCode
 	if req.NonceStr != "" {

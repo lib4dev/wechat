@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // Report 交易保障.
-func Report(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/payitil/report", req)
+func Report(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/payitil/report", req)
 }
 
 type ReportRequest struct {
@@ -32,7 +32,7 @@ type ReportRequest struct {
 }
 
 // Report2 交易保障.
-func Report2(clt *core.Client, req *ReportRequest) (err error) {
+func Report2(clt *mch.Client, req *ReportRequest) (err error) {
 	m1 := make(map[string]string, 24)
 	if req.DeviceInfo != "" {
 		m1["device_info"] = req.DeviceInfo
@@ -76,7 +76,7 @@ func Report2(clt *core.Client, req *ReportRequest) (err error) {
 		m1["out_trade_no"] = req.OutTradeNo
 	}
 	if !req.Time.IsZero() {
-		m1["time"] = core.FormatTime(req.Time)
+		m1["time"] = mch.FormatTime(req.Time)
 	}
 
 	_, err = Report(clt, m1)

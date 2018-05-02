@@ -5,13 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // UnifiedOrder 统一下单.
-func UnifiedOrder(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/pay/unifiedorder", req)
+func UnifiedOrder(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/pay/unifiedorder", req)
 }
 
 type UnifiedOrderRequest struct {
@@ -56,7 +56,7 @@ type UnifiedOrderResponse struct {
 }
 
 // UnifiedOrder2 统一下单.
-func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrderResponse, err error) {
+func UnifiedOrder2(clt *mch.Client, req *UnifiedOrderRequest) (resp *UnifiedOrderResponse, err error) {
 	m1 := make(map[string]string, 24)
 	m1["body"] = req.Body
 	m1["out_trade_no"] = req.OutTradeNo
@@ -85,10 +85,10 @@ func UnifiedOrder2(clt *core.Client, req *UnifiedOrderRequest) (resp *UnifiedOrd
 		m1["fee_type"] = req.FeeType
 	}
 	if !req.TimeStart.IsZero() {
-		m1["time_start"] = core.FormatTime(req.TimeStart)
+		m1["time_start"] = mch.FormatTime(req.TimeStart)
 	}
 	if !req.TimeExpire.IsZero() {
-		m1["time_expire"] = core.FormatTime(req.TimeExpire)
+		m1["time_expire"] = mch.FormatTime(req.TimeExpire)
 	}
 	if req.GoodsTag != "" {
 		m1["goods_tag"] = req.GoodsTag

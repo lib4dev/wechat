@@ -1,13 +1,13 @@
 package tools
 
 import (
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // ShortURL 转换短链接.
-func ShortURL(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/tools/shorturl", req)
+func ShortURL(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/tools/shorturl", req)
 }
 
 type ShortURLRequest struct {
@@ -29,7 +29,7 @@ type ShortURLResponse struct {
 }
 
 // ShortURL2 转换短链接.
-func ShortURL2(clt *core.Client, req *ShortURLRequest) (resp *ShortURLResponse, err error) {
+func ShortURL2(clt *mch.Client, req *ShortURLRequest) (resp *ShortURLResponse, err error) {
 	m1 := make(map[string]string, 8)
 	m1["long_url"] = req.LongURL
 	if req.NonceStr != "" {

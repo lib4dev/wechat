@@ -1,11 +1,9 @@
 package mmpaymkttransfers
 
-import (
-	"github.com/micro-plat/wechat/mch/core"
-)
+import "github.com/micro-plat/wechat/mch"
 
 // 发放代金券.
 //  请求需要双向证书
-func SendCoupon(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/mmpaymkttransfers/send_coupon", req)
+func SendCoupon(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/mmpaymkttransfers/send_coupon", req)
 }

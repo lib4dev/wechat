@@ -1,14 +1,14 @@
 package pay
 
 import (
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // Reverse 撤销订单.
 //  NOTE: 请求需要双向证书.
-func Reverse(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/secapi/pay/reverse", req)
+func Reverse(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/secapi/pay/reverse", req)
 }
 
 type ReverseRequest struct {
@@ -32,7 +32,7 @@ type ReverseResponse struct {
 
 // Reverse2 撤销订单.
 //  NOTE: 请求需要双向证书.
-func Reverse2(clt *core.Client, req *ReverseRequest) (resp *ReverseResponse, err error) {
+func Reverse2(clt *mch.Client, req *ReverseRequest) (resp *ReverseResponse, err error) {
 	m1 := make(map[string]string, 8)
 	if req.TransactionId != "" {
 		m1["transaction_id"] = req.TransactionId

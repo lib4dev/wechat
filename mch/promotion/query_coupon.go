@@ -1,10 +1,8 @@
 package promotion
 
-import (
-	"github.com/micro-plat/wechat/mch/core"
-)
+import "github.com/micro-plat/wechat/mch"
 
 // 查询代金券信息.
-func QueryCoupon(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/promotion/query_coupon", req)
+func QueryCoupon(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/promotion/query_coupon", req)
 }

@@ -5,13 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	wechatutil "github.com/micro-plat/wechat/util"
 )
 
 // OrderQuery 查询订单.
-func OrderQuery(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/pay/orderquery", req)
+func OrderQuery(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/pay/orderquery", req)
 }
 
 type OrderQueryRequest struct {
@@ -55,7 +55,7 @@ type OrderQueryResponse struct {
 
 // OrderQuery2 查询订单.
 //  NOTE: 该函数不支持 代金券 功能, 如果有 代金券 功能请使用 OrderQuery 函数.
-func OrderQuery2(clt *core.Client, req *OrderQueryRequest) (resp *OrderQueryResponse, err error) {
+func OrderQuery2(clt *mch.Client, req *OrderQueryRequest) (resp *OrderQueryResponse, err error) {
 	m1 := make(map[string]string, 8)
 	if req.TransactionId != "" {
 		m1["transaction_id"] = req.TransactionId
@@ -132,7 +132,7 @@ func OrderQuery2(clt *core.Client, req *OrderQueryRequest) (resp *OrderQueryResp
 		}
 	}
 	if str := m2["time_end"]; str != "" {
-		if t, err := core.ParseTime(str); err != nil {
+		if t, err := mch.ParseTime(str); err != nil {
 			err = fmt.Errorf("parse time_end:%q to time.Time failed: %s", str, err.Error())
 			return nil, err
 		} else {

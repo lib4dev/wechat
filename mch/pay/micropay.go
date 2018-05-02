@@ -5,13 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/mch/core"
+	"github.com/micro-plat/wechat/mch"
 	"github.com/micro-plat/wechat/util"
 )
 
 // MicroPay 提交刷卡支付.
-func MicroPay(clt *core.Client, req map[string]string) (resp map[string]string, err error) {
-	return clt.PostXML(core.APIBaseURL()+"/pay/micropay", req)
+func MicroPay(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+	return clt.PostXML(mch.APIBaseURL()+"/pay/micropay", req)
 }
 
 type MicroPayRequest struct {
@@ -63,7 +63,7 @@ type MicroPayResponse struct {
 }
 
 // MicroPay2 提交刷卡支付.
-func MicroPay2(clt *core.Client, req *MicroPayRequest) (resp *MicroPayResponse, err error) {
+func MicroPay2(clt *mch.Client, req *MicroPayRequest) (resp *MicroPayResponse, err error) {
 	m1 := make(map[string]string, 24)
 	m1["body"] = req.Body
 	m1["out_trade_no"] = req.OutTradeNo
@@ -141,7 +141,7 @@ func MicroPay2(clt *core.Client, req *MicroPayRequest) (resp *MicroPayResponse, 
 		}
 	}
 	if str := m2["time_end"]; str != "" {
-		if t, err := core.ParseTime(str); err != nil {
+		if t, err := mch.ParseTime(str); err != nil {
 			err = fmt.Errorf("parse time_end:%q to time.Time failed: %s", str, err.Error())
 			return nil, err
 		} else {

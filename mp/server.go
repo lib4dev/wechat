@@ -19,7 +19,7 @@ import (
 type Server struct {
 	*WConf
 
-	messageHandler func(*WConf, *context.Context, *core.MixedMsg) *core.Reply
+	messageHandler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply
 
 	requestRawXMLMsg []byte
 
@@ -29,17 +29,17 @@ type Server struct {
 	timestamp  int64
 }
 
-//NewServer init
-func NewServer(c *WConf) *Server {
+//NewMessageServer init
+func NewMessageServer(c *WConf) *Server {
 	srv := new(Server)
 	srv.WConf = c
 	return srv
 }
 
-//NewSeverHandler init
-func NewSeverHandler(c *WConf, handler func(*WConf, *context.Context, *core.MixedMsg) *core.Reply) func() *Server {
+//NewMessageSeverHandler init
+func NewMessageSeverHandler(c *WConf, handler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply) func() *Server {
 	return func() *Server {
-		s := NewServer(c)
+		s := NewMessageServer(c)
 		s.messageHandler = handler
 		return s
 	}
@@ -94,7 +94,7 @@ func (srv *Server) handleRequest(ctx *context.Context) (reply *core.Reply, mixMs
 		err = errors.New("消息类型转换失败")
 		return
 	}
-	reply = srv.messageHandler(srv.WConf, ctx, mixMessage)
+	reply = srv.messageHandler(srv.WConf, mixMessage, ctx)
 	return reply, mixMessage, nil
 }
 
@@ -151,7 +151,7 @@ func (srv *Server) parseRequestMessage(rawXMLMsgBytes []byte) (msg *core.MixedMs
 }
 
 //SetMessageHandler 设置用户自定义的回调方法
-func (srv *Server) SetMessageHandler(handler func(*WConf, *context.Context, *core.MixedMsg) *core.Reply) {
+func (srv *Server) SetMessageHandler(handler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply) {
 	srv.messageHandler = handler
 }
 

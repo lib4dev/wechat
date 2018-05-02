@@ -9,7 +9,7 @@ import (
 )
 
 //处理微信消息
-func recvMessage(cnf *mp.WConf, ctx *context.Context, msg *core.MixedMsg) *core.Reply {
+func recvMessage(cnf *mp.WConf, msg *core.MixedMsg, ctx *context.Context) *core.Reply {
 	ctx.Log.Info("-----recv.message-----")
 	switch msg.EventType {
 	case core.EventSubscribe:
