@@ -1,8 +1,6 @@
 package membercard
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type ActivateParameters struct {
 	Code   string `json:"code"`              // 必填, 创建会员卡时获取的初始code。
@@ -22,15 +20,15 @@ type ActivateParameters struct {
 }
 
 // 激活/绑定会员卡
-func Activate(clt *core.Context, para *ActivateParameters) (err error) {
-	var result core.Error
+func Activate(clt *mp.Context, para *ActivateParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/card/membercard/activate?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

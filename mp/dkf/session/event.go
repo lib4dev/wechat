@@ -1,23 +1,23 @@
 package session
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	EventTypeKfCreateSession core.EventType = "kf_create_session" // 接入会话
-	EventTypeKfCloseSession  core.EventType = "kf_close_session"  // 关闭会话
-	EventTypeKfSwitchSession core.EventType = "kf_switch_session" // 转接会话
+	EventTypeKfCreateSession mp.EventType = "kf_create_session" // 接入会话
+	EventTypeKfCloseSession  mp.EventType = "kf_close_session"  // 关闭会话
+	EventTypeKfSwitchSession mp.EventType = "kf_switch_session" // 转接会话
 )
 
 type KfCreateSessionEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"     json:"Event"`
-	KfAccount string         `xml:"KfAccount" json:"KfAccount"`
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"     json:"Event"`
+	KfAccount string       `xml:"KfAccount" json:"KfAccount"`
 }
 
-func GetKfCreateSessionEvent(msg *core.MixedMsg) *KfCreateSessionEvent {
+func GetKfCreateSessionEvent(msg *mp.MixedMsg) *KfCreateSessionEvent {
 	return &KfCreateSessionEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,
@@ -27,12 +27,12 @@ func GetKfCreateSessionEvent(msg *core.MixedMsg) *KfCreateSessionEvent {
 
 type KfCloseSessionEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"     json:"Event"`
-	KfAccount string         `xml:"KfAccount" json:"KfAccount"`
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"     json:"Event"`
+	KfAccount string       `xml:"KfAccount" json:"KfAccount"`
 }
 
-func GetKfCloseSessionEvent(msg *core.MixedMsg) *KfCloseSessionEvent {
+func GetKfCloseSessionEvent(msg *mp.MixedMsg) *KfCloseSessionEvent {
 	return &KfCloseSessionEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,
@@ -42,13 +42,13 @@ func GetKfCloseSessionEvent(msg *core.MixedMsg) *KfCloseSessionEvent {
 
 type KfSwitchSessionEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType     core.EventType `xml:"Event"         json:"Event"`
-	FromKfAccount string         `xml:"FromKfAccount" json:"FromKfAccount"`
-	ToKfAccount   string         `xml:"ToKfAccount"   json:"ToKfAccount"`
+	mp.MsgHeader
+	EventType     mp.EventType `xml:"Event"         json:"Event"`
+	FromKfAccount string       `xml:"FromKfAccount" json:"FromKfAccount"`
+	ToKfAccount   string       `xml:"ToKfAccount"   json:"ToKfAccount"`
 }
 
-func GetKfSwitchSessionEvent(msg *core.MixedMsg) *KfSwitchSessionEvent {
+func GetKfSwitchSessionEvent(msg *mp.MixedMsg) *KfSwitchSessionEvent {
 	return &KfSwitchSessionEvent{
 		MsgHeader:     msg.MsgHeader,
 		EventType:     msg.EventType,

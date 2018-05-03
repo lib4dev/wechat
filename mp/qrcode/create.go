@@ -1,7 +1,7 @@
 package qrcode
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type TempQrcode struct {
@@ -17,7 +17,7 @@ type PermQrcode struct {
 // CreateTempQrcode 创建临时二维码.
 //  sceneId:       场景值ID, 为32位非0整型
 //  expireSeconds: 二维码有效时间, 以秒为单位
-func CreateTempQrcode(clt *core.Context, sceneId int32, expireSeconds int) (qrcode *TempQrcode, err error) {
+func CreateTempQrcode(clt *mp.Context, sceneId int32, expireSeconds int) (qrcode *TempQrcode, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="
 
 	var request struct {
@@ -34,13 +34,13 @@ func CreateTempQrcode(clt *core.Context, sceneId int32, expireSeconds int) (qrco
 	request.ActionInfo.Scene.SceneId = sceneId
 
 	var result struct {
-		core.Error
+		mp.Error
 		TempQrcode
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -51,7 +51,7 @@ func CreateTempQrcode(clt *core.Context, sceneId int32, expireSeconds int) (qrco
 // CreateStrSceneTempQrcode 创建临时二维码.
 //  sceneStr:      场景值ID(字符串形式的ID), 字符串类型, 长度限制为1到64
 //  expireSeconds: 二维码有效时间, 以秒为单位
-func CreateStrSceneTempQrcode(clt *core.Context, sceneStr string, expireSeconds int) (qrcode *TempQrcode, err error) {
+func CreateStrSceneTempQrcode(clt *mp.Context, sceneStr string, expireSeconds int) (qrcode *TempQrcode, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="
 
 	var request struct {
@@ -68,13 +68,13 @@ func CreateStrSceneTempQrcode(clt *core.Context, sceneStr string, expireSeconds 
 	request.ActionInfo.Scene.SceneStr = sceneStr
 
 	var result struct {
-		core.Error
+		mp.Error
 		TempQrcode
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -84,7 +84,7 @@ func CreateStrSceneTempQrcode(clt *core.Context, sceneStr string, expireSeconds 
 
 // CreatePermQrcode 创建永久二维码
 //  sceneId: 场景值ID
-func CreatePermQrcode(clt *core.Context, sceneId int32) (qrcode *PermQrcode, err error) {
+func CreatePermQrcode(clt *mp.Context, sceneId int32) (qrcode *PermQrcode, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="
 
 	var request struct {
@@ -99,13 +99,13 @@ func CreatePermQrcode(clt *core.Context, sceneId int32) (qrcode *PermQrcode, err
 	request.ActionInfo.Scene.SceneId = sceneId
 
 	var result struct {
-		core.Error
+		mp.Error
 		PermQrcode
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -115,7 +115,7 @@ func CreatePermQrcode(clt *core.Context, sceneId int32) (qrcode *PermQrcode, err
 
 // CreateStrScenePermQrcode 创建永久二维码
 //  sceneStr: 场景值ID(字符串形式的ID), 字符串类型, 长度限制为1到64
-func CreateStrScenePermQrcode(clt *core.Context, sceneStr string) (qrcode *PermQrcode, err error) {
+func CreateStrScenePermQrcode(clt *mp.Context, sceneStr string) (qrcode *PermQrcode, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token="
 
 	var request struct {
@@ -130,13 +130,13 @@ func CreateStrScenePermQrcode(clt *core.Context, sceneStr string) (qrcode *PermQ
 	request.ActionInfo.Scene.SceneStr = sceneStr
 
 	var result struct {
-		core.Error
+		mp.Error
 		PermQrcode
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

@@ -1,18 +1,18 @@
 package mass
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	EventTypeMassSendJobFinish core.EventType = "MASSSENDJOBFINISH"
+	EventTypeMassSendJobFinish mp.EventType = "MASSSENDJOBFINISH"
 )
 
 // 事件推送群发结果
 type MassSendJobFinishEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event" json:"Event"` // 事件信息, 此处为 MASSSENDJOBFINISH
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event" json:"Event"` // 事件信息, 此处为 MASSSENDJOBFINISH
 	MsgId     int64          `xml:"MsgId" json:"MsgId"` // 群发的消息ID, 64位整型
 
 	// 群发的结构, 为 "send success" 或 "send fail" 或 "err(num)".
@@ -36,7 +36,7 @@ type MassSendJobFinishEvent struct {
 	ErrorCount  int `xml:"ErrorCount"  json:"ErrorCount"` // 发送失败的粉丝数
 }
 
-func GetMassSendJobFinishEvent(msg *core.MixedMsg) *MassSendJobFinishEvent {
+func GetMassSendJobFinishEvent(msg *mp.MixedMsg) *MassSendJobFinishEvent {
 	return &MassSendJobFinishEvent{
 		MsgHeader:   msg.MsgHeader,
 		EventType:   msg.EventType,

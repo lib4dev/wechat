@@ -1,11 +1,11 @@
 package poi
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // Delete 删除门店.
-func Delete(clt *core.Context, poiId int64) (err error) {
+func Delete(clt *mp.Context, poiId int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/poi/delpoi?access_token="
 
 	var request = struct {
@@ -13,11 +13,11 @@ func Delete(clt *core.Context, poiId int64) (err error) {
 	}{
 		PoiId: poiId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

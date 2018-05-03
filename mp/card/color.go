@@ -1,8 +1,6 @@
 package card
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type Color struct {
 	Name  string `json:"name"`
@@ -10,9 +8,9 @@ type Color struct {
 }
 
 // 获取卡券最新的颜色列表.
-func GetColors(clt *core.Context) (colors []Color, err error) {
+func GetColors(clt *mp.Context) (colors []Color, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		Colors []Color `json:"colors"`
 	}
 
@@ -21,7 +19,7 @@ func GetColors(clt *core.Context) (colors []Color, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

@@ -2,22 +2,22 @@
 package mass2users
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/mp/message/mass"
 )
 
 // Send 发送消息, msg 是经过 encoding/json.Marshal 得到的结果符合微信消息格式的任何数据结构.
-func Send(clt *core.Context, msg interface{}) (rslt *mass.Result, err error) {
+func Send(clt *mp.Context, msg interface{}) (rslt *mass.Result, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		mass.Result
 	}
 	if err = clt.PostJSON(incompleteURL, msg, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

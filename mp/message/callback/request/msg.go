@@ -1,29 +1,29 @@
 package request
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
 	// 普通消息类型
-	MsgTypeText       core.MsgType = "text"       // 文本消息
-	MsgTypeImage      core.MsgType = "image"      // 图片消息
-	MsgTypeVoice      core.MsgType = "voice"      // 语音消息
-	MsgTypeVideo      core.MsgType = "video"      // 视频消息
-	MsgTypeShortVideo core.MsgType = "shortvideo" // 小视频消息
-	MsgTypeLocation   core.MsgType = "location"   // 地理位置消息
-	MsgTypeLink       core.MsgType = "link"       // 链接消息
+	MsgTypeText       mp.MsgType = "text"       // 文本消息
+	MsgTypeImage      mp.MsgType = "image"      // 图片消息
+	MsgTypeVoice      mp.MsgType = "voice"      // 语音消息
+	MsgTypeVideo      mp.MsgType = "video"      // 视频消息
+	MsgTypeShortVideo mp.MsgType = "shortvideo" // 小视频消息
+	MsgTypeLocation   mp.MsgType = "location"   // 地理位置消息
+	MsgTypeLink       mp.MsgType = "link"       // 链接消息
 )
 
 // 文本消息
 type Text struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId   int64  `xml:"MsgId"   json:"MsgId"`   // 消息id, 64位整型
 	Content string `xml:"Content" json:"Content"` // 文本消息内容
 }
 
-func GetText(msg *core.MixedMsg) *Text {
+func GetText(msg *mp.MixedMsg) *Text {
 	return &Text{
 		MsgHeader: msg.MsgHeader,
 		MsgId:     msg.MsgId,
@@ -34,13 +34,13 @@ func GetText(msg *core.MixedMsg) *Text {
 // 图片消息
 type Image struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId   int64  `xml:"MsgId"   json:"MsgId"`   // 消息id, 64位整型
 	MediaId string `xml:"MediaId" json:"MediaId"` // 图片消息媒体id, 可以调用多媒体文件下载接口拉取数据.
 	PicURL  string `xml:"PicUrl"  json:"PicUrl"`  // 图片链接
 }
 
-func GetImage(msg *core.MixedMsg) *Image {
+func GetImage(msg *mp.MixedMsg) *Image {
 	return &Image{
 		MsgHeader: msg.MsgHeader,
 		MsgId:     msg.MsgId,
@@ -52,7 +52,7 @@ func GetImage(msg *core.MixedMsg) *Image {
 // 语音消息
 type Voice struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId   int64  `xml:"MsgId"   json:"MsgId"`   // 消息id, 64位整型
 	MediaId string `xml:"MediaId" json:"MediaId"` // 语音消息媒体id, 可以调用多媒体文件下载接口拉取该媒体
 	Format  string `xml:"Format"  json:"Format"`  // 语音格式, 如amr, speex等
@@ -62,7 +62,7 @@ type Voice struct {
 	Recognition string `xml:"Recognition,omitempty" json:"Recognition,omitempty"`
 }
 
-func GetVoice(msg *core.MixedMsg) *Voice {
+func GetVoice(msg *mp.MixedMsg) *Voice {
 	return &Voice{
 		MsgHeader:   msg.MsgHeader,
 		MsgId:       msg.MsgId,
@@ -75,13 +75,13 @@ func GetVoice(msg *core.MixedMsg) *Voice {
 // 视频消息
 type Video struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId        int64  `xml:"MsgId"        json:"MsgId"`        // 消息id, 64位整型
 	MediaId      string `xml:"MediaId"      json:"MediaId"`      // 视频消息媒体id, 可以调用多媒体文件下载接口拉取数据.
 	ThumbMediaId string `xml:"ThumbMediaId" json:"ThumbMediaId"` // 视频消息缩略图的媒体id, 可以调用多媒体文件下载接口拉取数据.
 }
 
-func GetVideo(msg *core.MixedMsg) *Video {
+func GetVideo(msg *mp.MixedMsg) *Video {
 	return &Video{
 		MsgHeader:    msg.MsgHeader,
 		MsgId:        msg.MsgId,
@@ -93,13 +93,13 @@ func GetVideo(msg *core.MixedMsg) *Video {
 // 小视频消息
 type ShortVideo struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId        int64  `xml:"MsgId"        json:"MsgId"`        // 消息id, 64位整型
 	MediaId      string `xml:"MediaId"      json:"MediaId"`      // 视频消息媒体id, 可以调用多媒体文件下载接口拉取数据.
 	ThumbMediaId string `xml:"ThumbMediaId" json:"ThumbMediaId"` // 视频消息缩略图的媒体id, 可以调用多媒体文件下载接口拉取数据.
 }
 
-func GetShortVideo(msg *core.MixedMsg) *ShortVideo {
+func GetShortVideo(msg *mp.MixedMsg) *ShortVideo {
 	return &ShortVideo{
 		MsgHeader:    msg.MsgHeader,
 		MsgId:        msg.MsgId,
@@ -111,7 +111,7 @@ func GetShortVideo(msg *core.MixedMsg) *ShortVideo {
 // 地理位置消息
 type Location struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId     int64   `xml:"MsgId"      json:"MsgId"`      // 消息id, 64位整型
 	LocationX float64 `xml:"Location_X" json:"Location_X"` // 地理位置纬度
 	LocationY float64 `xml:"Location_Y" json:"Location_Y"` // 地理位置经度
@@ -119,7 +119,7 @@ type Location struct {
 	Label     string  `xml:"Label"      json:"Label"`      // 地理位置信息
 }
 
-func GetLocation(msg *core.MixedMsg) *Location {
+func GetLocation(msg *mp.MixedMsg) *Location {
 	return &Location{
 		MsgHeader: msg.MsgHeader,
 		MsgId:     msg.MsgId,
@@ -133,14 +133,14 @@ func GetLocation(msg *core.MixedMsg) *Location {
 // 链接消息
 type Link struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	MsgId       int64  `xml:"MsgId"       json:"MsgId"`       // 消息id, 64位整型
 	Title       string `xml:"Title"       json:"Title"`       // 消息标题
 	Description string `xml:"Description" json:"Description"` // 消息描述
 	URL         string `xml:"Url"         json:"Url"`         // 消息链接
 }
 
-func GetLink(msg *core.MixedMsg) *Link {
+func GetLink(msg *mp.MixedMsg) *Link {
 	return &Link{
 		MsgHeader:   msg.MsgHeader,
 		MsgId:       msg.MsgId,

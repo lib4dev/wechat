@@ -1,22 +1,22 @@
 package menu
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 获取自定义菜单配置接口.
-func GetMenuInfo(clt *core.Context) (info MenuInfo, isMenuOpen bool, err error) {
+func GetMenuInfo(clt *mp.Context) (info MenuInfo, isMenuOpen bool, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		IsMenuOpen int      `json:"is_menu_open"`
 		MenuInfo   MenuInfo `json:"selfmenu_info"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

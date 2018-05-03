@@ -2,7 +2,7 @@ package device
 
 import (
 	"github.com/micro-plat/wechat/internal/util"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type SearchQuery struct {
@@ -43,9 +43,9 @@ type Device struct {
 }
 
 // 查询设备.
-func List(clt *core.Context, query *SearchQuery) (rslt *ListResult, err error) {
+func List(clt *mp.Context, query *SearchQuery) (rslt *ListResult, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		ListResult `json:"data"`
 	}
 
@@ -54,7 +54,7 @@ func List(clt *core.Context, query *SearchQuery) (rslt *ListResult, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -66,7 +66,7 @@ func List(clt *core.Context, query *SearchQuery) (rslt *ListResult, err error) {
 
 // DeviceIterator
 //
-//  iter, err := NewDeviceIterator(*core.Context, *SearchQuery)
+//  iter, err := NewDeviceIterator(*mp.Context, *SearchQuery)
 //  if err != nil {
 //      // TODO: 增加你的代码
 //  }
@@ -79,7 +79,7 @@ func List(clt *core.Context, query *SearchQuery) (rslt *ListResult, err error) {
 //      // TODO: 增加你的代码
 //  }
 type DeviceIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextQuery *SearchQuery
 
@@ -120,7 +120,7 @@ func (iter *DeviceIterator) NextPage() (records []Device, err error) {
 	return
 }
 
-func NewDeviceIterator(clt *core.Context, query *SearchQuery) (iter *DeviceIterator, err error) {
+func NewDeviceIterator(clt *mp.Context, query *SearchQuery) (iter *DeviceIterator, err error) {
 	// 逻辑上相当于第一次调用 DeviceIterator.NextPage, 因为第一次调用 DeviceIterator.HasNext 需要数据支撑, 所以提前获取了数据
 
 	rslt, err := List(clt, query)

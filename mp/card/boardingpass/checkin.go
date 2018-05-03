@@ -1,8 +1,6 @@
 package boardingpass
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type CheckinParameters struct {
 	Code   string `json:"code"`              // 必须; 卡券Code码。
@@ -17,15 +15,15 @@ type CheckinParameters struct {
 }
 
 // 更新飞机票信息接口
-func Checkin(clt *core.Context, para *CheckinParameters) (err error) {
-	var result core.Error
+func Checkin(clt *mp.Context, para *CheckinParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/card/boardingpass/checkin?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

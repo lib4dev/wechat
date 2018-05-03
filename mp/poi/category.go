@@ -1,21 +1,21 @@
 package poi
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // CategoryList 获取门店类目表.
-func CategoryList(clt *core.Context) (list []string, err error) {
+func CategoryList(clt *mp.Context) (list []string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/api_getwxcategory?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		CategoryList []string `json:"category_list"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

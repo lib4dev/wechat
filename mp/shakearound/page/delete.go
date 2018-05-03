@@ -1,25 +1,25 @@
 package page
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 删除页面
-func Delete(clt *core.Context, pageIds []int64) (err error) {
+func Delete(clt *mp.Context, pageIds []int64) (err error) {
 	request := struct {
 		PageIds []int64 `json:"page_ids,omitempty"`
 	}{
 		PageIds: pageIds,
 	}
 
-	var result core.Error
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/shakearound/page/delete?access_token="
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

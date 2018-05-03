@@ -1,11 +1,9 @@
 package code
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // 更改Code接口.
-func Update(clt *core.Context, id *CardItemIdentifier, newCode string) (err error) {
+func Update(clt *mp.Context, id *CardItemIdentifier, newCode string) (err error) {
 	request := struct {
 		*CardItemIdentifier
 		NewCode string `json:"new_code,omitempty"`
@@ -14,14 +12,14 @@ func Update(clt *core.Context, id *CardItemIdentifier, newCode string) (err erro
 		NewCode:            newCode,
 	}
 
-	var result core.Error
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/card/code/update?access_token="
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

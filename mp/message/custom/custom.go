@@ -2,18 +2,18 @@
 package custom
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // Send 发送消息, msg 是经过 encoding/json.Marshal 得到的结果符合微信消息格式的任何数据结构.
-func Send(clt *core.Context, msg interface{}) (err error) {
+func Send(clt *mp.Context, msg interface{}) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token="
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, msg, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

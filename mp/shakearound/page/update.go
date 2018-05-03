@@ -1,7 +1,7 @@
 package page
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type UpdateParameters struct {
@@ -14,15 +14,15 @@ type UpdateParameters struct {
 }
 
 // 编辑页面信息
-func Update(clt *core.Context, para *UpdateParameters) (err error) {
-	var result core.Error
+func Update(clt *mp.Context, para *UpdateParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/shakearound/page/update?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

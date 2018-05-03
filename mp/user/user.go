@@ -3,7 +3,7 @@ package user
 import (
 	"net/url"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
@@ -43,7 +43,7 @@ type UserInfo struct {
 //  注意:
 //  1. 需要判断返回的 UserInfo.IsSubscriber 是等于 1 还是 0
 //  2. lang 指定返回国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语, 默认为 zh_CN
-func Get(clt *core.Context, openId string, lang string) (info *UserInfo, err error) {
+func Get(clt *mp.Context, openId string, lang string) (info *UserInfo, err error) {
 	switch lang {
 	case "":
 		lang = LanguageZhCN
@@ -55,13 +55,13 @@ func Get(clt *core.Context, openId string, lang string) (info *UserInfo, err err
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/user/info?openid=" + url.QueryEscape(openId) +
 		"&lang=" + lang + "&access_token="
 	var result struct {
-		core.Error
+		mp.Error
 		UserInfo
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -76,7 +76,7 @@ type batchGetRequestItem struct {
 
 // 批量获取用户基本信息
 //  注意: 需要对返回的 UserInfoList 的每个 UserInfo.IsSubscriber 做判断
-func BatchGet(clt *core.Context, openIdList []string, lang string) (list []UserInfo, err error) {
+func BatchGet(clt *mp.Context, openIdList []string, lang string) (list []UserInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token="
 
 	if len(openIdList) <= 0 {
@@ -99,13 +99,13 @@ func BatchGet(clt *core.Context, openIdList []string, lang string) (list []UserI
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		UserInfoList []UserInfo `json:"user_info_list"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -114,7 +114,7 @@ func BatchGet(clt *core.Context, openIdList []string, lang string) (list []UserI
 }
 
 // UpdateRemark 设置用户备注名.
-func UpdateRemark(clt *core.Context, openId, remark string) (err error) {
+func UpdateRemark(clt *mp.Context, openId, remark string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token="
 
 	var request = struct {
@@ -124,11 +124,11 @@ func UpdateRemark(clt *core.Context, openId, remark string) (err error) {
 		OpenId: openId,
 		Remark: remark,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

@@ -1,22 +1,22 @@
 package preview
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	MsgTypeText   core.MsgType = "text"
-	MsgTypeImage  core.MsgType = "image"
-	MsgTypeVoice  core.MsgType = "voice"
-	MsgTypeVideo  core.MsgType = "mpvideo"
-	MsgTypeNews   core.MsgType = "mpnews"
-	MsgTypeWxCard core.MsgType = "wxcard"
+	MsgTypeText   mp.MsgType = "text"
+	MsgTypeImage  mp.MsgType = "image"
+	MsgTypeVoice  mp.MsgType = "voice"
+	MsgTypeVideo  mp.MsgType = "mpvideo"
+	MsgTypeNews   mp.MsgType = "mpnews"
+	MsgTypeWxCard mp.MsgType = "wxcard"
 )
 
 type MsgHeader struct {
 	ToWxName string       `json:"towxname,omitempty"`
 	ToUser   string       `json:"touser,omitempty"`
-	MsgType  core.MsgType `json:"msgtype"`
+	MsgType  mp.MsgType `json:"msgtype"`
 }
 
 type Text struct {

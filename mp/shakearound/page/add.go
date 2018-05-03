@@ -1,7 +1,7 @@
 package page
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type AddParameters struct {
@@ -13,9 +13,9 @@ type AddParameters struct {
 }
 
 // 新增页面
-func Add(clt *core.Context, para *AddParameters) (pageId int64, err error) {
+func Add(clt *mp.Context, para *AddParameters) (pageId int64, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		Data struct {
 			PageId int64 `json:"page_id"`
 		} `json:"data"`
@@ -26,7 +26,7 @@ func Add(clt *core.Context, para *AddParameters) (pageId int64, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

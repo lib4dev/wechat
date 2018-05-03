@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/micro-plat/wechat/internal/util"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/mp/shakearound/device"
 )
 
@@ -53,9 +53,9 @@ type Relation struct {
 }
 
 // 查询设备与页面的关联关系.
-func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err error) {
+func Search(clt *mp.Context, query *SearchQuery) (rslt *SearchResult, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		SearchResult `json:"data"`
 	}
 
@@ -64,7 +64,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -76,7 +76,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 
 // RelationIterator
 //
-//  iter, err := NewRelationIterator(*core.Context, *SearchQuery)
+//  iter, err := NewRelationIterator(*mp.Context, *SearchQuery)
 //  if err != nil {
 //      // TODO: 增加你的代码
 //  }
@@ -89,7 +89,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 //      // TODO: 增加你的代码
 //  }
 type RelationIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextQuery *SearchQuery // 下一次查询参数
 
@@ -130,7 +130,7 @@ func (iter *RelationIterator) NextPage() (relations []Relation, err error) {
 	return
 }
 
-func NewRelationIterator(clt *core.Context, query *SearchQuery) (iter *RelationIterator, err error) {
+func NewRelationIterator(clt *mp.Context, query *SearchQuery) (iter *RelationIterator, err error) {
 	if query.Begin == nil {
 		err = errors.New("nil SearchQuery.Begin")
 		return

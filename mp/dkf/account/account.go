@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // Add 添加客服账号.
@@ -14,7 +14,7 @@ import (
 //  nickname:        客服昵称，最长6个汉字或12个英文字符
 //  password:        客服账号登录密码
 //  isPasswordPlain: 标识 password 是否为明文格式, true 表示是明文密码, false 表示是密文密码.
-func Add(clt *core.Context, account, nickname, password string, isPasswordPlain bool) (err error) {
+func Add(clt *mp.Context, account, nickname, password string, isPasswordPlain bool) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token="
 
 	if password == "" {
@@ -34,11 +34,11 @@ func Add(clt *core.Context, account, nickname, password string, isPasswordPlain 
 		Nickname: nickname,
 		Password: password,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -50,7 +50,7 @@ func Add(clt *core.Context, account, nickname, password string, isPasswordPlain 
 //  nickname:        客服昵称，最长6个汉字或12个英文字符
 //  password:        客服账号登录密码
 //  isPasswordPlain: 标识 password 是否为明文格式, true 表示是明文密码, false 表示是密文密码.
-func Update(clt *core.Context, account, nickname, password string, isPasswordPlain bool) (err error) {
+func Update(clt *mp.Context, account, nickname, password string, isPasswordPlain bool) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token="
 
 	if isPasswordPlain && password != "" {
@@ -67,11 +67,11 @@ func Update(clt *core.Context, account, nickname, password string, isPasswordPla
 		Nickname: nickname,
 		Password: password,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -79,18 +79,18 @@ func Update(clt *core.Context, account, nickname, password string, isPasswordPla
 }
 
 // Delete 删除客服账号
-func Delete(clt *core.Context, kfAccount string) (err error) {
+func Delete(clt *mp.Context, kfAccount string) (err error) {
 	// TODO
 	//	incompleteURL := "https://api.weixin.qq.com/customservice/kfaccount/del?kf_account=" +
 	//		url.QueryEscape(kfAccount) + "&access_token="
 	incompleteURL := "https://api.weixin.qq.com/customservice/kfaccount/del?kf_account=" +
 		kfAccount + "&access_token="
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

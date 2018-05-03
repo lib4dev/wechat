@@ -1,8 +1,6 @@
 package poi
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type Photo struct {
 	PhotoURL string `json:"photo_url"`
@@ -32,7 +30,7 @@ type AddParameters struct {
 }
 
 // Add 创建门店.
-func Add(clt *core.Context, params *AddParameters) (err error) {
+func Add(clt *mp.Context, params *AddParameters) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/poi/addpoi?access_token="
 
 	var request = struct {
@@ -40,11 +38,11 @@ func Add(clt *core.Context, params *AddParameters) (err error) {
 	}{
 		AddParameters: params,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

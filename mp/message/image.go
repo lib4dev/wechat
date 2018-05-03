@@ -3,7 +3,7 @@ package message
 import (
 	"encoding/xml"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 //Image 图片消息
@@ -28,7 +28,7 @@ type CommonToken struct {
 	ToUserName   string       `xml:"ToUserName"`
 	FromUserName string       `xml:"FromUserName"`
 	CreateTime   int64        `xml:"CreateTime"`
-	MsgType      core.MsgType `xml:"MsgType"`
+	MsgType      mp.MsgType `xml:"MsgType"`
 }
 
 //SetToUserName set ToUserName
@@ -47,6 +47,6 @@ func (msg *CommonToken) SetCreateTime(createTime int64) {
 }
 
 //SetMsgType set MsgType
-func (msg *CommonToken) SetMsgType(msgType core.MsgType) {
+func (msg *CommonToken) SetMsgType(msgType mp.MsgType) {
 	msg.MsgType = msgType
 }

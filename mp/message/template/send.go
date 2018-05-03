@@ -3,7 +3,7 @@ package template
 import (
 	"encoding/json"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type TemplateMessage struct {
@@ -34,17 +34,17 @@ type DataItem struct {
 }
 
 // 发送模板消息, msg 是经过 encoding/json.Marshal 得到的结果符合微信消息格式的任何数据结构, 一般为 *TemplateMessage 类型.
-func Send(clt *core.Context, msg interface{}) (msgid int64, err error) {
+func Send(clt *mp.Context, msg interface{}) (msgid int64, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		MsgId int64 `json:"msgid"`
 	}
 	if err = clt.PostJSON(incompleteURL, msg, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

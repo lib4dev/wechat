@@ -3,11 +3,11 @@ package material
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 删除永久素材.
-func Delete(clt *core.Context, mediaId string) (err error) {
+func Delete(clt *mp.Context, mediaId string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token="
 
 	var request = struct {
@@ -15,11 +15,11 @@ func Delete(clt *core.Context, mediaId string) (err error) {
 	}{
 		MediaId: mediaId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -35,17 +35,17 @@ type MaterialCountInfo struct {
 }
 
 // 获取素材总数数据.
-func GetMaterialCount(clt *core.Context) (info *MaterialCountInfo, err error) {
+func GetMaterialCount(clt *mp.Context) (info *MaterialCountInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		MaterialCountInfo
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -70,7 +70,7 @@ type MaterialInfo struct {
 //  materialType: 素材的类型, 图片(image), 视频(video), 语音 (voice)
 //  offset:       从全部素材的该偏移位置开始返回, 0表示从第一个素材
 //  count:        返回素材的数量, 取值在1到20之间
-func BatchGet(clt *core.Context, materialType string, offset, count int) (rslt *BatchGetResult, err error) {
+func BatchGet(clt *mp.Context, materialType string, offset, count int) (rslt *BatchGetResult, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token="
 
 	switch materialType {
@@ -99,13 +99,13 @@ func BatchGet(clt *core.Context, materialType string, offset, count int) (rslt *
 		Count:        count,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		BatchGetResult
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -130,7 +130,7 @@ func BatchGet(clt *core.Context, materialType string, offset, count int) (rslt *
 //      // TODO: 增加你的代码
 //  }
 type MaterialIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	materialType string
 	nextOffset   int
@@ -170,7 +170,7 @@ func (iter *MaterialIterator) NextPage() (items []MaterialInfo, err error) {
 	return
 }
 
-func NewMaterialIterator(clt *core.Context, materialType string, offset, count int) (iter *MaterialIterator, err error) {
+func NewMaterialIterator(clt *mp.Context, materialType string, offset, count int) (iter *MaterialIterator, err error) {
 	// 逻辑上相当于第一次调用 MaterialIterator.NextPage,
 	// 因为第一次调用 MaterialIterator.HasNext 需要数据支撑, 所以提前获取了数据
 	rslt, err := BatchGet(clt, materialType, offset, count)

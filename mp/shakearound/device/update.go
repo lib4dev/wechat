@@ -2,7 +2,7 @@ package device
 
 import (
 	"github.com/micro-plat/wechat/internal/util"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 设备标识
@@ -40,7 +40,7 @@ func NewDeviceIdentifier3(deviceId int64, uuid string, major, minor int) *Device
 }
 
 // 编辑设备信息
-func Update(clt *core.Context, deviceIdentifier *DeviceIdentifier, comment string) (err error) {
+func Update(clt *mp.Context, deviceIdentifier *DeviceIdentifier, comment string) (err error) {
 	request := struct {
 		DeviceIdentifier *DeviceIdentifier `json:"device_identifier,omitempty"`
 		Comment          string            `json:"comment"`
@@ -49,14 +49,14 @@ func Update(clt *core.Context, deviceIdentifier *DeviceIdentifier, comment strin
 		Comment:          comment,
 	}
 
-	var result core.Error
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/shakearound/device/update?access_token="
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

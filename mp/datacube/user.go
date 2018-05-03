@@ -3,7 +3,7 @@ package datacube
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 用户增减数据
@@ -28,14 +28,14 @@ type UserSummaryData struct {
 }
 
 // 获取用户增减数据.
-func GetUserSummary(clt *core.Context, req *Request) (list []UserSummaryData, err error) {
+func GetUserSummary(clt *mp.Context, req *Request) (list []UserSummaryData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserSummaryData `json:"list"`
 	}
 
@@ -44,7 +44,7 @@ func GetUserSummary(clt *core.Context, req *Request) (list []UserSummaryData, er
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -60,14 +60,14 @@ type UserCumulateData struct {
 }
 
 // 获取累计用户数据.
-func GetUserCumulate(clt *core.Context, req *Request) (list []UserCumulateData, err error) {
+func GetUserCumulate(clt *mp.Context, req *Request) (list []UserCumulateData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserCumulateData `json:"list"`
 	}
 
@@ -76,7 +76,7 @@ func GetUserCumulate(clt *core.Context, req *Request) (list []UserCumulateData, 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

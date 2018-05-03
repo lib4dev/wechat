@@ -3,7 +3,7 @@ package datacube
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type ArticleBaseData struct {
@@ -31,14 +31,14 @@ type ArticleSummaryData struct {
 }
 
 // 获取图文群发每日数据.
-func GetArticleSummary(clt *core.Context, req *Request) (list []ArticleSummaryData, err error) {
+func GetArticleSummary(clt *mp.Context, req *Request) (list []ArticleSummaryData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []ArticleSummaryData `json:"list"`
 	}
 
@@ -47,7 +47,7 @@ func GetArticleSummary(clt *core.Context, req *Request) (list []ArticleSummaryDa
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -69,14 +69,14 @@ type ArticleTotalData struct {
 }
 
 // 获取图文群发总数据.
-func GetArticleTotal(clt *core.Context, req *Request) (list []ArticleTotalData, err error) {
+func GetArticleTotal(clt *mp.Context, req *Request) (list []ArticleTotalData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []ArticleTotalData `json:"list"`
 	}
 
@@ -85,7 +85,7 @@ func GetArticleTotal(clt *core.Context, req *Request) (list []ArticleTotalData, 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -101,14 +101,14 @@ type UserReadData struct {
 }
 
 // 获取图文统计数据.
-func GetUserRead(clt *core.Context, req *Request) (list []UserReadData, err error) {
+func GetUserRead(clt *mp.Context, req *Request) (list []UserReadData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserReadData `json:"list"`
 	}
 
@@ -117,7 +117,7 @@ func GetUserRead(clt *core.Context, req *Request) (list []UserReadData, err erro
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -133,14 +133,14 @@ type UserReadHourData struct {
 }
 
 // 获取图文统计分时数据.
-func GetUserReadHour(clt *core.Context, req *Request) (list []UserReadHourData, err error) {
+func GetUserReadHour(clt *mp.Context, req *Request) (list []UserReadHourData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserReadHourData `json:"list"`
 	}
 
@@ -149,7 +149,7 @@ func GetUserReadHour(clt *core.Context, req *Request) (list []UserReadHourData, 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -167,14 +167,14 @@ type UserShareData struct {
 }
 
 // 获取图文分享转发数据.
-func GetUserShare(clt *core.Context, req *Request) (list []UserShareData, err error) {
+func GetUserShare(clt *mp.Context, req *Request) (list []UserShareData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserShareData `json:"list"`
 	}
 
@@ -183,7 +183,7 @@ func GetUserShare(clt *core.Context, req *Request) (list []UserShareData, err er
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -198,14 +198,14 @@ type UserShareHourData struct {
 }
 
 // 获取图文分享转发分时数据.
-func GetUserShareHour(clt *core.Context, req *Request) (list []UserShareHourData, err error) {
+func GetUserShareHour(clt *mp.Context, req *Request) (list []UserShareHourData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UserShareHourData `json:"list"`
 	}
 
@@ -214,7 +214,7 @@ func GetUserShareHour(clt *core.Context, req *Request) (list []UserShareHourData
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

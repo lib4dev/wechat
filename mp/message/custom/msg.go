@@ -1,24 +1,24 @@
 package custom
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	MsgTypeText       core.MsgType = "text"   // 文本消息
-	MsgTypeImage      core.MsgType = "image"  // 图片消息
-	MsgTypeVoice      core.MsgType = "voice"  // 语音消息
-	MsgTypeVideo      core.MsgType = "video"  // 视频消息
-	MsgTypeMusic      core.MsgType = "music"  // 音乐消息
-	MsgTypeNews       core.MsgType = "news"   // 图文消息
-	MsgTypeMPNews     core.MsgType = "mpnews" // 图文消息, 发送已经创建好的图文
-	MsgTypeWxCard     core.MsgType = "wxcard" // 卡卷消息
-	MsgTypeWxMiniLink core.MsgType = "link"   // 小程序客服消息:图文链接
+	MsgTypeText       mp.MsgType = "text"   // 文本消息
+	MsgTypeImage      mp.MsgType = "image"  // 图片消息
+	MsgTypeVoice      mp.MsgType = "voice"  // 语音消息
+	MsgTypeVideo      mp.MsgType = "video"  // 视频消息
+	MsgTypeMusic      mp.MsgType = "music"  // 音乐消息
+	MsgTypeNews       mp.MsgType = "news"   // 图文消息
+	MsgTypeMPNews     mp.MsgType = "mpnews" // 图文消息, 发送已经创建好的图文
+	MsgTypeWxCard     mp.MsgType = "wxcard" // 卡卷消息
+	MsgTypeWxMiniLink mp.MsgType = "link"   // 小程序客服消息:图文链接
 )
 
 type MsgHeader struct {
 	ToUser  string       `json:"touser"` // 接收方 OpenID
-	MsgType core.MsgType `json:"msgtype"`
+	MsgType mp.MsgType `json:"msgtype"`
 }
 
 type CustomService struct {

@@ -3,7 +3,7 @@ package datacube
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 接口分析数据
@@ -16,14 +16,14 @@ type InterfaceSummaryData struct {
 }
 
 // 获取接口分析数据.
-func GetInterfaceSummary(clt *core.Context, req *Request) (list []InterfaceSummaryData, err error) {
+func GetInterfaceSummary(clt *mp.Context, req *Request) (list []InterfaceSummaryData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []InterfaceSummaryData `json:"list"`
 	}
 
@@ -32,7 +32,7 @@ func GetInterfaceSummary(clt *core.Context, req *Request) (list []InterfaceSumma
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -46,14 +46,14 @@ type InterfaceSummaryHourData struct {
 }
 
 // 获取接口分析分时数据.
-func GetInterfaceSummaryHour(clt *core.Context, req *Request) (list []InterfaceSummaryHourData, err error) {
+func GetInterfaceSummaryHour(clt *mp.Context, req *Request) (list []InterfaceSummaryHourData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []InterfaceSummaryHourData `json:"list"`
 	}
 
@@ -62,7 +62,7 @@ func GetInterfaceSummaryHour(clt *core.Context, req *Request) (list []InterfaceS
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

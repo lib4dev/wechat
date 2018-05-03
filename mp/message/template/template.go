@@ -1,11 +1,11 @@
 package template
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 设置所属行业.
-func SetIndustry(clt *core.Context, industryId1, industryId2 int64) (err error) {
+func SetIndustry(clt *mp.Context, industryId1, industryId2 int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/template/api_set_industry?access_token="
 
 	var request = struct {
@@ -15,11 +15,11 @@ func SetIndustry(clt *core.Context, industryId1, industryId2 int64) (err error) 
 		IndustryId1: industryId1,
 		IndustryId2: industryId2,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -32,18 +32,18 @@ type Industry struct {
 }
 
 // 获取设置的行业信息
-func GetIndustry(clt *core.Context) (primaryIndustry, secondaryIndustry Industry, err error) {
+func GetIndustry(clt *mp.Context) (primaryIndustry, secondaryIndustry Industry, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/template/get_industry?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		PrimaryIndustry   Industry `json:"primary_industry"`
 		SecondaryIndustry Industry `json:"secondary_industry"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -54,7 +54,7 @@ func GetIndustry(clt *core.Context) (primaryIndustry, secondaryIndustry Industry
 
 // 从行业模板库选择模板添加到账号后台, 并返回模板id.
 //  templateIdShort: 模板库中模板的编号, 有"TM**"和"OPENTMTM**"等形式.
-func AddPrivateTemplate(clt *core.Context, templateIdShort string) (templateId string, err error) {
+func AddPrivateTemplate(clt *mp.Context, templateIdShort string) (templateId string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/template/api_add_template?access_token="
 
 	var request = struct {
@@ -63,13 +63,13 @@ func AddPrivateTemplate(clt *core.Context, templateIdShort string) (templateId s
 		TemplateIdShort: templateIdShort,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		TemplateId string `json:"template_id"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -96,17 +96,17 @@ type Template struct {
 }
 
 // 获取模板列表
-func GetAllPrivateTemplate(clt *core.Context) (templateList []Template, err error) {
+func GetAllPrivateTemplate(clt *mp.Context) (templateList []Template, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/template/get_all_private_template?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		TemplateList []Template `json:"template_list"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -115,7 +115,7 @@ func GetAllPrivateTemplate(clt *core.Context) (templateList []Template, err erro
 }
 
 // 删除模板.
-func DeletePrivateTemplate(clt *core.Context, templateId string) (err error) {
+func DeletePrivateTemplate(clt *mp.Context, templateId string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/template/del_private_template?access_token="
 
 	var request = struct {
@@ -123,11 +123,11 @@ func DeletePrivateTemplate(clt *core.Context, templateId string) (err error) {
 	}{
 		TemplateId: templateId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

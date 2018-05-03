@@ -1,7 +1,7 @@
 package media
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Article struct {
@@ -19,17 +19,17 @@ type News struct {
 }
 
 // UploadNews 创建图文消息素材, 返回的素材一般用于群发消息.
-func UploadNews(clt *core.Context, news *News) (info *MediaInfo, err error) {
+func UploadNews(clt *mp.Context, news *News) (info *MediaInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		MediaInfo
 	}
 	if err = clt.PostJSON(incompleteURL, news, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

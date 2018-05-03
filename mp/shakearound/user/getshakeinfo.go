@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type BeaconInfo struct {
@@ -21,7 +21,7 @@ type Shakeinfo struct {
 // 获取摇周边的设备及用户信息
 //  ticket:  摇周边业务的ticket，可在摇到的URL中得到，ticket生效时间为30分钟，每一次摇都会重新生成新的ticket
 //  needPoi: 是否需要返回门店poi_id
-func GetShakeInfo(clt *core.Context, ticket string, needPoi bool) (info *Shakeinfo, err error) {
+func GetShakeInfo(clt *mp.Context, ticket string, needPoi bool) (info *Shakeinfo, err error) {
 	request := struct {
 		Ticket  string `json:"ticket"`
 		NeedPoi int    `json:"need_poi,omitempty"`
@@ -34,7 +34,7 @@ func GetShakeInfo(clt *core.Context, ticket string, needPoi bool) (info *Shakein
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Shakeinfo `json:"data"`
 	}
 
@@ -43,7 +43,7 @@ func GetShakeInfo(clt *core.Context, ticket string, needPoi bool) (info *Shakein
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

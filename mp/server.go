@@ -8,8 +8,6 @@ import (
 	"runtime/debug"
 	"strconv"
 
-	"github.com/micro-plat/wechat/mp/core"
-
 	"github.com/micro-plat/hydra/context"
 
 	"github.com/micro-plat/wechat/util"
@@ -19,7 +17,7 @@ import (
 type Server struct {
 	*WConf
 
-	messageHandler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply
+	messageHandler func(*WConf, *MixedMsg, *context.Context) *Reply
 
 	requestRawXMLMsg []byte
 
@@ -37,7 +35,7 @@ func NewMessageServer(c *WConf) *Server {
 }
 
 //NewMessageSeverHandler init
-func NewMessageSeverHandler(c *WConf, handler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply) func() *Server {
+func NewMessageSeverHandler(c *WConf, handler func(*WConf, *MixedMsg, *context.Context) *Reply) func() *Server {
 	return func() *Server {
 		s := NewMessageServer(c)
 		s.messageHandler = handler
@@ -76,7 +74,7 @@ func (srv *Server) Validate(ctx *context.Context) bool {
 }
 
 //HandleRequest 处理微信的请求
-func (srv *Server) handleRequest(ctx *context.Context) (reply *core.Reply, mixMsg *core.MixedMsg, err error) {
+func (srv *Server) handleRequest(ctx *context.Context) (reply *Reply, mixMsg *MixedMsg, err error) {
 	//set isSafeMode
 	srv.isSafeMode = false
 	encryptType := ctx.Request.GetString("encrypt_type")
@@ -89,7 +87,7 @@ func (srv *Server) handleRequest(ctx *context.Context) (reply *core.Reply, mixMs
 	if err != nil {
 		return
 	}
-	mixMessage, success := msg.(*core.MixedMsg)
+	mixMessage, success := msg.(*MixedMsg)
 	if !success {
 		err = errors.New("消息类型转换失败")
 		return
@@ -102,7 +100,7 @@ func (srv *Server) handleRequest(ctx *context.Context) (reply *core.Reply, mixMs
 func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 	var rawXMLMsgBytes []byte
 	if srv.isSafeMode {
-		var encryptedXMLMsg core.EncryptedXMLMsg
+		var encryptedXMLMsg EncryptedXMLMsg
 		body, err := ctx.Request.Ext.GetBody()
 		if err != nil {
 			return nil, err
@@ -143,19 +141,19 @@ func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 	return srv.parseRequestMessage(rawXMLMsgBytes)
 }
 
-func (srv *Server) parseRequestMessage(rawXMLMsgBytes []byte) (msg *core.MixedMsg, err error) {
-	msg = &core.MixedMsg{}
+func (srv *Server) parseRequestMessage(rawXMLMsgBytes []byte) (msg *MixedMsg, err error) {
+	msg = &MixedMsg{}
 	err = xml.Unmarshal(rawXMLMsgBytes, msg)
 	msg.Raw = rawXMLMsgBytes
 	return
 }
 
 //SetMessageHandler 设置用户自定义的回调方法
-func (srv *Server) SetMessageHandler(handler func(*WConf, *core.MixedMsg, *context.Context) *core.Reply) {
+func (srv *Server) SetMessageHandler(handler func(*WConf, *MixedMsg, *context.Context) *Reply) {
 	srv.messageHandler = handler
 }
 
-func (srv *Server) buildResponse(requestMsg *core.MixedMsg, reply *core.Reply) (msgData interface{}, err error) {
+func (srv *Server) buildResponse(requestMsg *MixedMsg, reply *Reply) (msgData interface{}, err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = fmt.Errorf("panic error: %v\n%s", e, debug.Stack())
@@ -166,15 +164,15 @@ func (srv *Server) buildResponse(requestMsg *core.MixedMsg, reply *core.Reply) (
 	}
 	msgType := reply.MsgType
 	switch msgType {
-	case core.MsgTypeText:
-	case core.MsgTypeImage:
-	case core.MsgTypeVoice:
-	case core.MsgTypeVideo:
-	case core.MsgTypeMusic:
-	case core.MsgTypeNews:
-	case core.MsgTypeTransfer:
+	case MsgTypeText:
+	case MsgTypeImage:
+	case MsgTypeVoice:
+	case MsgTypeVideo:
+	case MsgTypeMusic:
+	case MsgTypeNews:
+	case MsgTypeTransfer:
 	default:
-		err = core.ErrUnsupportReply
+		err = ErrUnsupportReply
 		return
 	}
 
@@ -183,7 +181,7 @@ func (srv *Server) buildResponse(requestMsg *core.MixedMsg, reply *core.Reply) (
 	//msgData must be a ptr
 	kind := value.Kind().String()
 	if "ptr" != kind {
-		return nil, core.ErrUnsupportReply
+		return nil, ErrUnsupportReply
 	}
 
 	params := make([]reflect.Value, 1)
@@ -223,7 +221,7 @@ func (srv *Server) send(responseMsg interface{}, ctx *context.Context) (err erro
 		timestamp := srv.timestamp
 		timestampStr := strconv.FormatInt(timestamp, 10)
 		msgSignature := util.Signature(srv.Token, timestampStr, srv.nonce, string(encryptedMsg))
-		replyMsg = core.ResponseEncryptedXMLMsg{
+		replyMsg = ResponseEncryptedXMLMsg{
 			EncryptedMsg: string(encryptedMsg),
 			MsgSignature: msgSignature,
 			Timestamp:    timestamp,

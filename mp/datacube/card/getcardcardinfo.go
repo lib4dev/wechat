@@ -1,7 +1,7 @@
 package card
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 免费券数据
@@ -23,9 +23,9 @@ type CardData struct {
 }
 
 // 获取免费券数据接口
-func GetCardInfo(clt *core.Context, req *Request) (list []CardData, err error) {
+func GetCardInfo(clt *mp.Context, req *Request) (list []CardData, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		List []CardData `json:"list"`
 	}
 
@@ -34,7 +34,7 @@ func GetCardInfo(clt *core.Context, req *Request) (list []CardData, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

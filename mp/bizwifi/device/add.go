@@ -1,8 +1,6 @@
 package device
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type AddParameters struct {
 	ShopId   int64  `json:"shop_id"`  // 必须, 门店ID
@@ -12,15 +10,15 @@ type AddParameters struct {
 }
 
 // 添加设备
-func Add(clt *core.Context, para *AddParameters) (err error) {
-	var result core.Error
+func Add(clt *mp.Context, para *AddParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/bizwifi/device/add?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

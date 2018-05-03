@@ -3,7 +3,7 @@ package shop
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Shop struct {
@@ -26,7 +26,7 @@ type ListResult struct {
 // 获取WiFi门店列表.
 //  pageIndex: 分页下标，默认从1开始
 //  pageSize:  每页的个数，默认10个，最大20个
-func List(clt *core.Context, pageIndex, pageSize int) (rslt *ListResult, err error) {
+func List(clt *mp.Context, pageIndex, pageSize int) (rslt *ListResult, err error) {
 	if pageIndex < 1 {
 		err = errors.New("Incorrect pageIndex")
 		return
@@ -45,7 +45,7 @@ func List(clt *core.Context, pageIndex, pageSize int) (rslt *ListResult, err err
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		ListResult `json:"data"`
 	}
 
@@ -54,7 +54,7 @@ func List(clt *core.Context, pageIndex, pageSize int) (rslt *ListResult, err err
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -79,7 +79,7 @@ func List(clt *core.Context, pageIndex, pageSize int) (rslt *ListResult, err err
 //      // TODO: 增加你的代码
 //  }
 type ShopIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	pageSize      int
 	nextPageIndex int
@@ -121,7 +121,7 @@ func (iter *ShopIterator) NextPage() (records []Shop, err error) {
 	return
 }
 
-func NewShopIterator(clt *core.Context, pageIndex, pageSize int) (iter *ShopIterator, err error) {
+func NewShopIterator(clt *mp.Context, pageIndex, pageSize int) (iter *ShopIterator, err error) {
 	// 逻辑上相当于第一次调用 ShopIterator.NextPage, 因为第一次调用 ShopIterator.HasNext 需要数据支撑, 所以提前获取了数据
 
 	rslt, err := List(clt, pageIndex, pageSize)

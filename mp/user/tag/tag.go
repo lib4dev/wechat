@@ -1,7 +1,7 @@
 package tag
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Tag struct {
@@ -22,7 +22,7 @@ type GetResult struct {
 	NextOpenId string `json:"next_openid"`
 }
 
-func Create(clt *core.Context, name string) (tag *Tag, err error) {
+func Create(clt *mp.Context, name string) (tag *Tag, err error) {
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token="
 	var request struct {
 		Tag struct {
@@ -31,13 +31,13 @@ func Create(clt *core.Context, name string) (tag *Tag, err error) {
 	}
 	request.Tag.Name = name
 	var result struct {
-		core.Error
+		mp.Error
 		Tag Tag `json:"tag"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -47,17 +47,17 @@ func Create(clt *core.Context, name string) (tag *Tag, err error) {
 }
 
 // List 查询所有Tag.
-func List(clt *core.Context) (tags []Tag, err error) {
+func List(clt *mp.Context) (tags []Tag, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		Tags []Tag `json:"tags"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -66,7 +66,7 @@ func List(clt *core.Context) (tags []Tag, err error) {
 }
 
 // Update 修改Tag名.
-func Update(clt *core.Context, tagId int, name string) (err error) {
+func Update(clt *mp.Context, tagId int, name string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token="
 
 	var request struct {
@@ -78,11 +78,11 @@ func Update(clt *core.Context, tagId int, name string) (err error) {
 	request.Tag.Id = tagId
 	request.Tag.Name = name
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -91,7 +91,7 @@ func Update(clt *core.Context, tagId int, name string) (err error) {
 
 // TagGet 根据TagId获取用户列表.
 //  NOTE: 每次最多能获取 10000 个用户, 可以多次指定 nextOpenId 来获取以满足需求, 如果 nextOpenId == "" 则表示从头获取
-func TagGet(clt *core.Context, tagId int, nextOpenId string) (rslt *GetResult, err error) {
+func TagGet(clt *mp.Context, tagId int, nextOpenId string) (rslt *GetResult, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/user/tag/get?access_token="
 
 	var request = struct {
@@ -102,13 +102,13 @@ func TagGet(clt *core.Context, tagId int, nextOpenId string) (rslt *GetResult, e
 		OpenId: nextOpenId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		GetResult
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -117,7 +117,7 @@ func TagGet(clt *core.Context, tagId int, nextOpenId string) (rslt *GetResult, e
 }
 
 // Delete 删除Tag.
-func Delete(clt *core.Context, tagId int) (err error) {
+func Delete(clt *mp.Context, tagId int) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token="
 
 	var request struct {
@@ -127,11 +127,11 @@ func Delete(clt *core.Context, tagId int) (err error) {
 	}
 	request.Tag.Id = tagId
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -139,7 +139,7 @@ func Delete(clt *core.Context, tagId int) (err error) {
 }
 
 // BatchTag 批量打标签.
-func BatchTag(clt *core.Context, openIdList []string, tagId int) (err error) {
+func BatchTag(clt *mp.Context, openIdList []string, tagId int) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token="
 
 	if len(openIdList) <= 0 {
@@ -153,11 +153,11 @@ func BatchTag(clt *core.Context, openIdList []string, tagId int) (err error) {
 		OpenIdList: openIdList,
 		TagId:      tagId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -165,7 +165,7 @@ func BatchTag(clt *core.Context, openIdList []string, tagId int) (err error) {
 }
 
 // BatchUntag 批量取消标签.
-func BatchUntag(clt *core.Context, openIdList []string, tagId int) (err error) {
+func BatchUntag(clt *mp.Context, openIdList []string, tagId int) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchuntagging?access_token="
 
 	if len(openIdList) <= 0 {
@@ -179,11 +179,11 @@ func BatchUntag(clt *core.Context, openIdList []string, tagId int) (err error) {
 		OpenIdList: openIdList,
 		TagId:      tagId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

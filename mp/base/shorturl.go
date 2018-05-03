@@ -1,11 +1,9 @@
 package base
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // ShortURL 将一条长链接转成短链接.
-func ShortURL(clt *core.Context, longURL string) (shortURL string, err error) {
+func ShortURL(clt *mp.Context, longURL string) (shortURL string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/shorturl?access_token="
 
 	var request = struct {
@@ -16,13 +14,13 @@ func ShortURL(clt *core.Context, longURL string) (shortURL string, err error) {
 		LongURL: longURL,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		ShortURL string `json:"short_url"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

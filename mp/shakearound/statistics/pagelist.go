@@ -1,7 +1,7 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const PageListPageSize = 50
@@ -19,7 +19,7 @@ type PageListResult struct {
 }
 
 // 批量查询设备统计数据接口
-func PageList(clt *core.Context, date int64, pageIndex int) (rslt *PageListResult, err error) {
+func PageList(clt *mp.Context, date int64, pageIndex int) (rslt *PageListResult, err error) {
 	request := struct {
 		Date      int64 `json:"date"`
 		PageIndex int   `json:"page_index"`
@@ -29,7 +29,7 @@ func PageList(clt *core.Context, date int64, pageIndex int) (rslt *PageListResul
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		PageListResult
 	}
 
@@ -38,7 +38,7 @@ func PageList(clt *core.Context, date int64, pageIndex int) (rslt *PageListResul
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -67,7 +67,7 @@ func PageList(clt *core.Context, date int64, pageIndex int) (rslt *PageListResul
 //      // TODO: 增加你的代码
 //  }
 type PageStatisticsIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	date          int64
 	nextPageIndex int
@@ -108,7 +108,7 @@ func (iter *PageStatisticsIterator) NextPage() (statisticsList []PageStatistics,
 	return
 }
 
-func NewPageStatisticsIterator(clt *core.Context, date int64, pageIndex int) (iter *PageStatisticsIterator, err error) {
+func NewPageStatisticsIterator(clt *mp.Context, date int64, pageIndex int) (iter *PageStatisticsIterator, err error) {
 	// 逻辑上相当于第一次调用 PageStatisticsIterator.NextPage, 因为第一次调用 PageStatisticsIterator.HasNext 需要数据支撑, 所以提前获取了数据
 
 	rslt, err := PageList(clt, date, pageIndex)

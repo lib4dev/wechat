@@ -8,7 +8,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // jsapi_ticket 中控服务器接口.
@@ -26,7 +26,7 @@ var _ TicketServer = (*DefaultTicketServer)(nil)
 //  2. 因为 DefaultTicketServer 同时也是一个简单的中控服务器, 而不是仅仅实现 TicketServer 接口,
 //     所以整个系统只能存在一个 DefaultTicketServer 实例!
 type DefaultTicketServer struct {
-	coreClient *core.Context
+	coreClient *mp.Context
 
 	refreshTicketRequestChan  chan string              // chan currentTicket
 	refreshTicketResponseChan chan refreshTicketResult // chan {ticket, err}
@@ -35,9 +35,9 @@ type DefaultTicketServer struct {
 }
 
 // NewDefaultTicketServer 创建一个新的 DefaultTicketServer.
-func NewDefaultTicketServer(clt *core.Context) (srv *DefaultTicketServer) {
+func NewDefaultTicketServer(clt *mp.Context) (srv *DefaultTicketServer) {
 	if clt == nil {
-		panic("nil core.Context")
+		panic("nil mp.Context")
 	}
 	srv = &DefaultTicketServer{
 		coreClient:                clt,
@@ -126,14 +126,14 @@ func (srv *DefaultTicketServer) updateTicket(currentTicket string) (ticket *jsap
 
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token="
 	var result struct {
-		core.Error
+		mp.Error
 		jsapiTicket
 	}
 	if err = srv.coreClient.GetJSON(incompleteURL, &result); err != nil {
 		atomic.StorePointer(&srv.ticketCache, nil)
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		atomic.StorePointer(&srv.ticketCache, nil)
 		err = &result.Error
 		return

@@ -1,11 +1,11 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 以页面为维度的数据统计接口
-func Page(clt *core.Context, pageId, beginDate, endDate int64) (data []StatisticsBase, err error) {
+func Page(clt *mp.Context, pageId, beginDate, endDate int64) (data []StatisticsBase, err error) {
 	request := struct {
 		PageId    int64 `json:"page_id"`
 		BeginDate int64 `json:"begin_date"`
@@ -17,7 +17,7 @@ func Page(clt *core.Context, pageId, beginDate, endDate int64) (data []Statistic
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Data []StatisticsBase `json:"data"`
 	}
 
@@ -26,7 +26,7 @@ func Page(clt *core.Context, pageId, beginDate, endDate int64) (data []Statistic
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

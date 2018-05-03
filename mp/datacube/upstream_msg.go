@@ -3,7 +3,7 @@ package datacube
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 消息发送概况数据
@@ -23,14 +23,14 @@ type UpstreamMsgData struct {
 }
 
 // 获取消息发送概况数据.
-func GetUpstreamMsg(clt *core.Context, req *Request) (list []UpstreamMsgData, err error) {
+func GetUpstreamMsg(clt *mp.Context, req *Request) (list []UpstreamMsgData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgData `json:"list"`
 	}
 
@@ -39,7 +39,7 @@ func GetUpstreamMsg(clt *core.Context, req *Request) (list []UpstreamMsgData, er
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -54,14 +54,14 @@ type UpstreamMsgHourData struct {
 }
 
 // 获取消息分送分时数据.
-func GetUpstreamMsgHour(clt *core.Context, req *Request) (list []UpstreamMsgHourData, err error) {
+func GetUpstreamMsgHour(clt *mp.Context, req *Request) (list []UpstreamMsgHourData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgHourData `json:"list"`
 	}
 
@@ -70,7 +70,7 @@ func GetUpstreamMsgHour(clt *core.Context, req *Request) (list []UpstreamMsgHour
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -82,14 +82,14 @@ func GetUpstreamMsgHour(clt *core.Context, req *Request) (list []UpstreamMsgHour
 type UpstreamMsgWeekData UpstreamMsgData
 
 // 获取消息发送周数据.
-func GetUpstreamMsgWeek(clt *core.Context, req *Request) (list []UpstreamMsgWeekData, err error) {
+func GetUpstreamMsgWeek(clt *mp.Context, req *Request) (list []UpstreamMsgWeekData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgWeekData `json:"list"`
 	}
 
@@ -98,7 +98,7 @@ func GetUpstreamMsgWeek(clt *core.Context, req *Request) (list []UpstreamMsgWeek
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -110,14 +110,14 @@ func GetUpstreamMsgWeek(clt *core.Context, req *Request) (list []UpstreamMsgWeek
 type UpstreamMsgMonthData UpstreamMsgData
 
 // 获取消息发送月数据.
-func GetUpstreamMsgMonth(clt *core.Context, req *Request) (list []UpstreamMsgMonthData, err error) {
+func GetUpstreamMsgMonth(clt *mp.Context, req *Request) (list []UpstreamMsgMonthData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgMonthData `json:"list"`
 	}
 
@@ -126,7 +126,7 @@ func GetUpstreamMsgMonth(clt *core.Context, req *Request) (list []UpstreamMsgMon
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -143,14 +143,14 @@ type UpstreamMsgDistData struct {
 }
 
 // 获取消息发送分布数据.
-func GetUpstreamMsgDist(clt *core.Context, req *Request) (list []UpstreamMsgDistData, err error) {
+func GetUpstreamMsgDist(clt *mp.Context, req *Request) (list []UpstreamMsgDistData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgDistData `json:"list"`
 	}
 
@@ -159,7 +159,7 @@ func GetUpstreamMsgDist(clt *core.Context, req *Request) (list []UpstreamMsgDist
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -171,14 +171,14 @@ func GetUpstreamMsgDist(clt *core.Context, req *Request) (list []UpstreamMsgDist
 type UpstreamMsgDistWeekData UpstreamMsgDistData
 
 // 获取消息发送分布周数据.
-func GetUpstreamMsgDistWeek(clt *core.Context, req *Request) (list []UpstreamMsgDistWeekData, err error) {
+func GetUpstreamMsgDistWeek(clt *mp.Context, req *Request) (list []UpstreamMsgDistWeekData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgDistWeekData `json:"list"`
 	}
 
@@ -187,7 +187,7 @@ func GetUpstreamMsgDistWeek(clt *core.Context, req *Request) (list []UpstreamMsg
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -199,14 +199,14 @@ func GetUpstreamMsgDistWeek(clt *core.Context, req *Request) (list []UpstreamMsg
 type UpstreamMsgDistMonthData UpstreamMsgDistData
 
 // 获取消息发送分布月数据.
-func GetUpstreamMsgDistMonth(clt *core.Context, req *Request) (list []UpstreamMsgDistMonthData, err error) {
+func GetUpstreamMsgDistMonth(clt *mp.Context, req *Request) (list []UpstreamMsgDistMonthData, err error) {
 	if req == nil {
 		err = errors.New("nil Request")
 		return
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		List []UpstreamMsgDistMonthData `json:"list"`
 	}
 
@@ -215,7 +215,7 @@ func GetUpstreamMsgDistMonth(clt *core.Context, req *Request) (list []UpstreamMs
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

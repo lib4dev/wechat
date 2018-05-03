@@ -3,7 +3,7 @@ package dkf
 import (
 	"encoding/json"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 客服基本信息
@@ -15,17 +15,17 @@ type KfInfo struct {
 }
 
 // KfList 获取客服基本信息.
-func KfList(clt *core.Context) (list []KfInfo, err error) {
+func KfList(clt *mp.Context) (list []KfInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		KfList []KfInfo `json:"kf_list"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -49,17 +49,17 @@ type OnlineKfInfo struct {
 }
 
 // OnlineKfList 获取在线客服接待信息.
-func OnlineKfList(clt *core.Context) (list []OnlineKfInfo, err error) {
+func OnlineKfList(clt *mp.Context) (list []OnlineKfInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/customservice/getonlinekflist?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		OnlineKfInfoList []OnlineKfInfo `json:"kf_online_list"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

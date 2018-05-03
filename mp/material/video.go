@@ -1,7 +1,7 @@
 package material
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Video struct {
@@ -11,7 +11,7 @@ type Video struct {
 }
 
 // 获取视频消息素材信息.
-func GetVideo(clt *core.Context, mediaId string) (info *Video, err error) {
+func GetVideo(clt *mp.Context, mediaId string) (info *Video, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token="
 
 	var request = struct {
@@ -20,13 +20,13 @@ func GetVideo(clt *core.Context, mediaId string) (info *Video, err error) {
 		MediaId: mediaId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		Video
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

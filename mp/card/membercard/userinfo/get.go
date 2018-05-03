@@ -1,8 +1,8 @@
 package userinfo
 
 import (
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/mp/card/code"
-	"github.com/micro-plat/wechat/mp/core"
 )
 
 type CustomField struct {
@@ -18,9 +18,9 @@ type UserInfo struct {
 }
 
 // 拉取会员信息（积分查询）接口
-func Get(clt *core.Context, id *code.CardItemIdentifier) (info *UserInfo, err error) {
+func Get(clt *mp.Context, id *code.CardItemIdentifier) (info *UserInfo, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		UserInfo
 	}
 
@@ -29,7 +29,7 @@ func Get(clt *core.Context, id *code.CardItemIdentifier) (info *UserInfo, err er
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

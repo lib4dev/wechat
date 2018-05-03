@@ -1,8 +1,6 @@
 package membercard
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type UpdateUserParameters struct {
 	Code   string `json:"code"`              // 必须; 要消耗的序列号.
@@ -25,9 +23,9 @@ type UpdateUserResult struct {
 }
 
 // 更新会员信息
-func UpdateUser(clt *core.Context, para *UpdateUserParameters) (rslt *UpdateUserResult, err error) {
+func UpdateUser(clt *mp.Context, para *UpdateUserParameters) (rslt *UpdateUserResult, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		UpdateUserResult
 	}
 
@@ -36,7 +34,7 @@ func UpdateUser(clt *core.Context, para *UpdateUserParameters) (rslt *UpdateUser
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

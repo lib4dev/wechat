@@ -1,7 +1,7 @@
 package device
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type ApplyStatus struct {
@@ -12,7 +12,7 @@ type ApplyStatus struct {
 }
 
 // 查询设备ID申请审核状态
-func GetApplyStatus(clt *core.Context, applyId int64) (status *ApplyStatus, err error) {
+func GetApplyStatus(clt *mp.Context, applyId int64) (status *ApplyStatus, err error) {
 	request := struct {
 		ApplyId int64 `json:"apply_id"`
 	}{
@@ -20,7 +20,7 @@ func GetApplyStatus(clt *core.Context, applyId int64) (status *ApplyStatus, err 
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		ApplyStatus `json:"data"`
 	}
 
@@ -29,7 +29,7 @@ func GetApplyStatus(clt *core.Context, applyId int64) (status *ApplyStatus, err 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

@@ -1,7 +1,7 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const DeviceListPageSize = 50
@@ -19,7 +19,7 @@ type DeviceListResult struct {
 }
 
 // 批量查询设备统计数据接口
-func DeviceList(clt *core.Context, date int64, pageIndex int) (rslt *DeviceListResult, err error) {
+func DeviceList(clt *mp.Context, date int64, pageIndex int) (rslt *DeviceListResult, err error) {
 	request := struct {
 		Date      int64 `json:"date"`
 		PageIndex int   `json:"page_index"`
@@ -29,7 +29,7 @@ func DeviceList(clt *core.Context, date int64, pageIndex int) (rslt *DeviceListR
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		DeviceListResult
 	}
 
@@ -38,7 +38,7 @@ func DeviceList(clt *core.Context, date int64, pageIndex int) (rslt *DeviceListR
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -67,7 +67,7 @@ func DeviceList(clt *core.Context, date int64, pageIndex int) (rslt *DeviceListR
 //      // TODO: 增加你的代码
 //  }
 type DeviceStatisticsIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	date          int64
 	nextPageIndex int
@@ -108,7 +108,7 @@ func (iter *DeviceStatisticsIterator) NextPage() (statisticsList []DeviceStatist
 	return
 }
 
-func NewDeviceStatisticsIterator(clt *core.Context, date int64, pageIndex int) (iter *DeviceStatisticsIterator, err error) {
+func NewDeviceStatisticsIterator(clt *mp.Context, date int64, pageIndex int) (iter *DeviceStatisticsIterator, err error) {
 	// 逻辑上相当于第一次调用 DeviceStatisticsIterator.NextPage, 因为第一次调用 DeviceStatisticsIterator.HasNext 需要数据支撑, 所以提前获取了数据
 
 	rslt, err := DeviceList(clt, date, pageIndex)

@@ -3,7 +3,7 @@ package qrcode
 import (
 	"net/url"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 func QrcodePicURL(ticket string) string {
@@ -26,7 +26,7 @@ type QrcodeInfo struct {
 }
 
 // 卡券投放, 创建二维码接口.
-func Create(clt *core.Context, para *CreateParameters) (info *QrcodeInfo, err error) {
+func Create(clt *mp.Context, para *CreateParameters) (info *QrcodeInfo, err error) {
 	request := struct {
 		ActionName    string `json:"action_name"`
 		ExpireSeconds int    `json:"expire_seconds,omitempty"`
@@ -40,7 +40,7 @@ func Create(clt *core.Context, para *CreateParameters) (info *QrcodeInfo, err er
 	request.ActionInfo.Card = para
 
 	var result struct {
-		core.Error
+		mp.Error
 		QrcodeInfo
 	}
 
@@ -49,7 +49,7 @@ func Create(clt *core.Context, para *CreateParameters) (info *QrcodeInfo, err er
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

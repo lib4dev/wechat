@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/mp/menu"
 	"github.com/micro-plat/wechat/mp/message/callback/request"
 	"github.com/micro-plat/wechat/mp/message/callback/response"
@@ -23,22 +23,22 @@ const (
 
 var (
 	// 下面两个变量不一定非要作为全局变量, 根据自己的场景来选择.
-	msgHandler core.Handler
-	msgServer  *core.Server
+	msgHandler mp.Handler
+	msgServer  *mp.Server
 )
 
 func init() {
-	mux := core.NewServeMux()
+	mux := mp.NewServeMux()
 	mux.DefaultMsgHandleFunc(defaultMsgHandler)
 	mux.DefaultEventHandleFunc(defaultEventHandler)
 	mux.MsgHandleFunc(request.MsgTypeText, textMsgHandler)
 	mux.EventHandleFunc(menu.EventTypeClick, menuClickEventHandler)
 
 	msgHandler = mux
-	msgServer = core.NewServer(wxOriId, wxAppId, wxToken, wxEncodedAESKey, msgHandler, nil)
+	msgServer = mp.NewServer(wxOriId, wxAppId, wxToken, wxEncodedAESKey, msgHandler, nil)
 }
 
-func textMsgHandler(ctx *core.Context) {
+func textMsgHandler(ctx *mp.Context) {
 	log.Printf("收到文本消息:\n%s\n", ctx.MsgPlaintext)
 
 	msg := request.GetText(ctx.MixedMsg)
@@ -47,12 +47,12 @@ func textMsgHandler(ctx *core.Context) {
 	ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 }
 
-func defaultMsgHandler(ctx *core.Context) {
+func defaultMsgHandler(ctx *mp.Context) {
 	log.Printf("收到消息:\n%s\n", ctx.MsgPlaintext)
 	ctx.NoneResponse()
 }
 
-func menuClickEventHandler(ctx *core.Context) {
+func menuClickEventHandler(ctx *mp.Context) {
 	log.Printf("收到菜单 click 事件:\n%s\n", ctx.MsgPlaintext)
 
 	event := menu.GetClickEvent(ctx.MixedMsg)
@@ -61,7 +61,7 @@ func menuClickEventHandler(ctx *core.Context) {
 	ctx.AESResponse(resp, 0, "", nil) // aes密文回复
 }
 
-func defaultEventHandler(ctx *core.Context) {
+func defaultEventHandler(ctx *mp.Context) {
 	log.Printf("收到事件:\n%s\n", ctx.MsgPlaintext)
 	ctx.NoneResponse()
 }
@@ -90,7 +90,7 @@ import (
 	"fmt"
 
 	"github.com/micro-plat/wechat/mp/base"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
@@ -103,8 +103,8 @@ const (
 )
 
 var (
-	accessTokenServer core.AccessTokenServer = core.NewDefaultAccessTokenServer(wxAppId, wxAppSecret, nil)
-	wechatClient      *core.Context           = core.NewClient(accessTokenServer, nil)
+	accessTokenServer mp.AccessTokenServer = mp.NewDefaultAccessTokenServer(wxAppId, wxAppSecret, nil)
+	wechatClient      *mp.Context           = mp.NewClient(accessTokenServer, nil)
 )
 
 func main() {

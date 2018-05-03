@@ -1,17 +1,17 @@
 package dkf
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	MsgTypeTransferCustomerService core.MsgType = "transfer_customer_service" // 将消息转发到多客服
+	MsgTypeTransferCustomerService mp.MsgType = "transfer_customer_service" // 将消息转发到多客服
 )
 
 // 将消息转发到多客服消息
 type TransferToCustomerService struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	TransInfo *TransInfo `xml:"TransInfo,omitempty" json:"TransInfo,omitempty"`
 }
 
@@ -22,7 +22,7 @@ type TransInfo struct {
 // 如果不指定客服则 kfAccount 留空.
 func NewTransferToCustomerService(to, from string, timestamp int64, kfAccount string) (msg *TransferToCustomerService) {
 	msg = &TransferToCustomerService{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,

@@ -1,7 +1,7 @@
 package device
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type BindPageParameters struct {
@@ -11,15 +11,15 @@ type BindPageParameters struct {
 	Append           int               `json:"append"`                      // 必须, 新增操作标志位， 0为覆盖，1为新增
 }
 
-func BindPage(clt *core.Context, para *BindPageParameters) (err error) {
-	var result core.Error
+func BindPage(clt *mp.Context, para *BindPageParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/shakearound/device/bindpage?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

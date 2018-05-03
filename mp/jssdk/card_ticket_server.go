@@ -8,7 +8,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 卡劵 api_ticket 中控服务器接口.
@@ -26,7 +26,7 @@ var _ CardTicketServer = (*DefaultCardTicketServer)(nil)
 //  2. 因为 DefaultCardTicketServer 同时也是一个简单的中控服务器, 而不是仅仅实现 CardTicketServer 接口,
 //     所以整个系统只能存在一个 DefaultCardTicketServer 实例!
 type DefaultCardTicketServer struct {
-	coreClient *core.Context
+	coreClient *mp.Context
 
 	refreshTicketRequestChan  chan string              // chan currentTicket
 	refreshTicketResponseChan chan refreshTicketResult // chan {ticket, err}
@@ -35,9 +35,9 @@ type DefaultCardTicketServer struct {
 }
 
 // NewDefaultCardTicketServer 创建一个新的 DefaultCardTicketServer.
-func NewDefaultCardTicketServer(clt *core.Context) (srv *DefaultCardTicketServer) {
+func NewDefaultCardTicketServer(clt *mp.Context) (srv *DefaultCardTicketServer) {
 	if clt == nil {
-		panic("nil core.Context")
+		panic("nil mp.Context")
 	}
 	srv = &DefaultCardTicketServer{
 		coreClient:                clt,
@@ -126,14 +126,14 @@ func (srv *DefaultCardTicketServer) updateTicket(currentTicket string) (ticket *
 
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=wx_card&access_token="
 	var result struct {
-		core.Error
+		mp.Error
 		cardApiTicket
 	}
 	if err = srv.coreClient.GetJSON(incompleteURL, &result); err != nil {
 		atomic.StorePointer(&srv.ticketCache, nil)
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		atomic.StorePointer(&srv.ticketCache, nil)
 		err = &result.Error
 		return

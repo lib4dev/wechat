@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/micro-plat/wechat/internal/util"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type SearchQuery struct {
@@ -45,9 +45,9 @@ type Page struct {
 }
 
 // 查询页面列表.
-func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err error) {
+func Search(clt *mp.Context, query *SearchQuery) (rslt *SearchResult, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		SearchResult `json:"data"`
 	}
 
@@ -56,7 +56,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -68,7 +68,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 
 // PageIterator
 //
-//  iter, err := NewPageIterator(*core.Context, *SearchQuery)
+//  iter, err := NewPageIterator(*mp.Context, *SearchQuery)
 //  if err != nil {
 //      // TODO: 增加你的代码
 //  }
@@ -81,7 +81,7 @@ func Search(clt *core.Context, query *SearchQuery) (rslt *SearchResult, err erro
 //      // TODO: 增加你的代码
 //  }
 type PageIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextQuery *SearchQuery // 下一次查询参数
 
@@ -122,7 +122,7 @@ func (iter *PageIterator) NextPage() (pages []Page, err error) {
 	return
 }
 
-func NewPageIterator(clt *core.Context, query *SearchQuery) (iter *PageIterator, err error) {
+func NewPageIterator(clt *mp.Context, query *SearchQuery) (iter *PageIterator, err error) {
 	if query.Type != 2 {
 		err = errors.New("Unsupported SearchQuery.Type")
 		return

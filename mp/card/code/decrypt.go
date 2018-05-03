@@ -1,11 +1,9 @@
 package code
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // Code解码接口
-func Decrypt(clt *core.Context, encryptCode string) (code string, err error) {
+func Decrypt(clt *mp.Context, encryptCode string) (code string, err error) {
 	request := struct {
 		EncryptCode string `json:"encrypt_code"`
 	}{
@@ -13,7 +11,7 @@ func Decrypt(clt *core.Context, encryptCode string) (code string, err error) {
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Code string `json:"code"`
 	}
 
@@ -22,7 +20,7 @@ func Decrypt(clt *core.Context, encryptCode string) (code string, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

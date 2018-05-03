@@ -1,7 +1,7 @@
 package poi
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Poi struct {
@@ -32,7 +32,7 @@ type Poi struct {
 }
 
 // Get 查询门店信息.
-func Get(clt *core.Context, poiId int64) (poi *Poi, err error) {
+func Get(clt *mp.Context, poiId int64) (poi *Poi, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/poi/getpoi?access_token="
 
 	var request = struct {
@@ -41,13 +41,13 @@ func Get(clt *core.Context, poiId int64) (poi *Poi, err error) {
 		PoiId: poiId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		Poi `json:"business"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

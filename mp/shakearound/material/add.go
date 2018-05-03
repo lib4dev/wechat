@@ -7,14 +7,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type ImageInfo struct {
 	PicURL string `json:"pic_url"`
 }
 
-func Add(clt *core.Context, imagePath, _type string) (info ImageInfo, err error) {
+func Add(clt *mp.Context, imagePath, _type string) (info ImageInfo, err error) {
 	file, err := os.Open(imagePath)
 	if err != nil {
 		return
@@ -24,7 +24,7 @@ func Add(clt *core.Context, imagePath, _type string) (info ImageInfo, err error)
 	return addFromReader(clt, filepath.Base(imagePath), file, _type)
 }
 
-func AddFromReader(clt *core.Context, filename string, reader io.Reader, _type string) (info ImageInfo, err error) {
+func AddFromReader(clt *mp.Context, filename string, reader io.Reader, _type string) (info ImageInfo, err error) {
 	if filename == "" {
 		err = errors.New("empty filename")
 		return
@@ -37,9 +37,9 @@ func AddFromReader(clt *core.Context, filename string, reader io.Reader, _type s
 	return addFromReader(clt, filename, reader, _type)
 }
 
-func addFromReader(clt *core.Context, filename string, reader io.Reader, _type string) (info ImageInfo, err error) {
+func addFromReader(clt *mp.Context, filename string, reader io.Reader, _type string) (info ImageInfo, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		ImageInfo `json:"data"`
 	}
 
@@ -50,7 +50,7 @@ func addFromReader(clt *core.Context, filename string, reader io.Reader, _type s
 	} else {
 		incompleteURL = "https://api.weixin.qq.com/shakearound/material/add?access_token="
 	}
-	fields := []core.MultipartFormField{{
+	fields := []mp.MultipartFormField{{
 		IsFile:   true,
 		Name:     "media",
 		FileName: filename,
@@ -60,7 +60,7 @@ func addFromReader(clt *core.Context, filename string, reader io.Reader, _type s
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

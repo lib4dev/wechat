@@ -1,11 +1,11 @@
 package user
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // GroupId 查询用户所在分组.
-func GroupId(clt *core.Context, openId string) (groupId int64, err error) {
+func GroupId(clt *mp.Context, openId string) (groupId int64, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/getid?access_token="
 
 	var request = struct {
@@ -14,13 +14,13 @@ func GroupId(clt *core.Context, openId string) (groupId int64, err error) {
 		OpenId: openId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		GroupId int64 `json:"groupid"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -29,7 +29,7 @@ func GroupId(clt *core.Context, openId string) (groupId int64, err error) {
 }
 
 // MoveToGroup 移动用户分组.
-func MoveToGroup(clt *core.Context, openId string, toGroupId int64) (err error) {
+func MoveToGroup(clt *mp.Context, openId string, toGroupId int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token="
 
 	var request = struct {
@@ -39,11 +39,11 @@ func MoveToGroup(clt *core.Context, openId string, toGroupId int64) (err error) 
 		OpenId:    openId,
 		ToGroupId: toGroupId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -51,7 +51,7 @@ func MoveToGroup(clt *core.Context, openId string, toGroupId int64) (err error) 
 }
 
 // BatchMoveToGroup 批量移动用户分组.
-func BatchMoveToGroup(clt *core.Context, openIdList []string, toGroupId int64) (err error) {
+func BatchMoveToGroup(clt *mp.Context, openIdList []string, toGroupId int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/members/batchupdate?access_token="
 
 	if len(openIdList) <= 0 {
@@ -65,11 +65,11 @@ func BatchMoveToGroup(clt *core.Context, openIdList []string, toGroupId int64) (
 		OpenIdList: openIdList,
 		ToGroupId:  toGroupId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

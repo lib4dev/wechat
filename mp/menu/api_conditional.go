@@ -1,21 +1,21 @@
 package menu
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 创建个性化菜单.
-func AddConditionalMenu(clt *core.Context, menu *Menu) (menuId int64, err error) {
+func AddConditionalMenu(clt *mp.Context, menu *Menu) (menuId int64, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		MenuId int64 `json:"menuId"`
 	}
 	if err = clt.PostJSON(incompleteURL, menu, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -24,7 +24,7 @@ func AddConditionalMenu(clt *core.Context, menu *Menu) (menuId int64, err error)
 }
 
 // 删除个性化菜单.
-func DeleteConditionalMenu(clt *core.Context, menuId int64) (err error) {
+func DeleteConditionalMenu(clt *mp.Context, menuId int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token="
 
 	var request = struct {
@@ -32,11 +32,11 @@ func DeleteConditionalMenu(clt *core.Context, menuId int64) (err error) {
 	}{
 		MenuId: menuId,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -45,7 +45,7 @@ func DeleteConditionalMenu(clt *core.Context, menuId int64) (err error) {
 
 // 测试个性化菜单匹配结果.
 //  userId 可以是粉丝的 OpenID, 也可以是粉丝的微信号
-func TryMatch(clt *core.Context, userId string) (menu *Menu, err error) {
+func TryMatch(clt *mp.Context, userId string) (menu *Menu, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token="
 
 	var request = struct {
@@ -54,13 +54,13 @@ func TryMatch(clt *core.Context, userId string) (menu *Menu, err error) {
 		UserId: userId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		Menu `json:"menu"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

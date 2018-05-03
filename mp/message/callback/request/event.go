@@ -4,29 +4,29 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
 	// 普通事件类型
-	EventTypeSubscribe   core.EventType = "subscribe"   // 关注事件, 包括点击关注和扫描二维码(公众号二维码和公众号带参数二维码)关注
-	EventTypeUnsubscribe core.EventType = "unsubscribe" // 取消关注事件
-	EventTypeScan        core.EventType = "SCAN"        // 已经关注的用户扫描带参数二维码事件
-	EventTypeLocation    core.EventType = "LOCATION"    // 上报地理位置事件
+	EventTypeSubscribe   mp.EventType = "subscribe"   // 关注事件, 包括点击关注和扫描二维码(公众号二维码和公众号带参数二维码)关注
+	EventTypeUnsubscribe mp.EventType = "unsubscribe" // 取消关注事件
+	EventTypeScan        mp.EventType = "SCAN"        // 已经关注的用户扫描带参数二维码事件
+	EventTypeLocation    mp.EventType = "LOCATION"    // 上报地理位置事件
 )
 
 // 关注事件
 type SubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event" json:"Event"` // subscribe
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event" json:"Event"` // subscribe
 
 	// 下面两个字段只有在扫描带参数二维码进行关注时才有值, 否则为空值!
 	EventKey string `xml:"EventKey,omitempty" json:"EventKey,omitempty"` // 事件KEY值, 格式为: qrscene_二维码的参数值
 	Ticket   string `xml:"Ticket,omitempty"   json:"Ticket,omitempty"`   // 二维码的ticket, 可用来换取二维码图片
 }
 
-func GetSubscribeEvent(msg *core.MixedMsg) *SubscribeEvent {
+func GetSubscribeEvent(msg *mp.MixedMsg) *SubscribeEvent {
 	return &SubscribeEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,
@@ -49,12 +49,12 @@ func (event *SubscribeEvent) Scene() (scene string, err error) {
 // 取消关注事件
 type UnsubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"              json:"Event"`              // unsubscribe
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"              json:"Event"`              // unsubscribe
 	EventKey  string         `xml:"EventKey,omitempty" json:"EventKey,omitempty"` // 事件KEY值, 空值
 }
 
-func GetUnsubscribeEvent(msg *core.MixedMsg) *UnsubscribeEvent {
+func GetUnsubscribeEvent(msg *mp.MixedMsg) *UnsubscribeEvent {
 	return &UnsubscribeEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,
@@ -65,13 +65,13 @@ func GetUnsubscribeEvent(msg *core.MixedMsg) *UnsubscribeEvent {
 // 用户已关注时, 扫描带参数二维码的事件
 type ScanEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"    json:"Event"`    // SCAN
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"    json:"Event"`    // SCAN
 	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 二维码的参数值(scene_id, scene_str)
 	Ticket    string         `xml:"Ticket"   json:"Ticket"`   // 二维码的ticket, 可用来换取二维码图片
 }
 
-func GetScanEvent(msg *core.MixedMsg) *ScanEvent {
+func GetScanEvent(msg *mp.MixedMsg) *ScanEvent {
 	return &ScanEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,
@@ -83,14 +83,14 @@ func GetScanEvent(msg *core.MixedMsg) *ScanEvent {
 // 上报地理位置事件
 type LocationEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"     json:"Event"`     // LOCATION
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"     json:"Event"`     // LOCATION
 	Latitude  float64        `xml:"Latitude"  json:"Latitude"`  // 地理位置纬度
 	Longitude float64        `xml:"Longitude" json:"Longitude"` // 地理位置经度
 	Precision float64        `xml:"Precision" json:"Precision"` // 地理位置精度(整数? 但是微信推送过来是浮点数形式)
 }
 
-func GetLocationEvent(msg *core.MixedMsg) *LocationEvent {
+func GetLocationEvent(msg *mp.MixedMsg) *LocationEvent {
 	return &LocationEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,

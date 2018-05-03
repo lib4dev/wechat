@@ -1,8 +1,6 @@
 package statistics
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type Statistics struct {
 	ShopId     int64 `json:"shop_id"`     // 门店ID，-1为总统计
@@ -17,7 +15,7 @@ type Statistics struct {
 //  shopId     按门店ID搜索，-1为总统计
 //  beginDate: 起始日期时间，格式yyyy-mm-dd，最长时间跨度为30天
 //  endDate:   结束日期时间戳，格式yyyy-mm-dd，最长时间跨度为30天
-func List(clt *core.Context, shopId int64, beginDate, endDate string) (data []Statistics, err error) {
+func List(clt *mp.Context, shopId int64, beginDate, endDate string) (data []Statistics, err error) {
 	request := struct {
 		ShopId    int64  `json:"shop_id"`
 		BeginDate string `json:"begin_date"`
@@ -29,7 +27,7 @@ func List(clt *core.Context, shopId int64, beginDate, endDate string) (data []St
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Data []Statistics `json:"data"`
 	}
 
@@ -38,7 +36,7 @@ func List(clt *core.Context, shopId int64, beginDate, endDate string) (data []St
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

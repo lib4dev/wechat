@@ -1,7 +1,7 @@
 package card
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 卡券概况数据
@@ -20,9 +20,9 @@ type BizUinData struct {
 }
 
 // 拉取卡券概况数据接口
-func GetBizUinInfo(clt *core.Context, req *Request) (list []BizUinData, err error) {
+func GetBizUinInfo(clt *mp.Context, req *Request) (list []BizUinData, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		List []BizUinData `json:"list"`
 	}
 
@@ -31,7 +31,7 @@ func GetBizUinInfo(clt *core.Context, req *Request) (list []BizUinData, err erro
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

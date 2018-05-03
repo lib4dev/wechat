@@ -1,12 +1,12 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/mp/shakearound/device"
 )
 
 // 以设备为维度的数据统计接口
-func Device(clt *core.Context, deviceIdentifier *device.DeviceIdentifier, beginDate, endDate int64) (data []StatisticsBase, err error) {
+func Device(clt *mp.Context, deviceIdentifier *device.DeviceIdentifier, beginDate, endDate int64) (data []StatisticsBase, err error) {
 	request := struct {
 		DeviceIdentifier *device.DeviceIdentifier `json:"device_identifier,omitempty"`
 		BeginDate        int64                    `json:"begin_date"`
@@ -18,7 +18,7 @@ func Device(clt *core.Context, deviceIdentifier *device.DeviceIdentifier, beginD
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Data []StatisticsBase `json:"data"`
 	}
 
@@ -27,7 +27,7 @@ func Device(clt *core.Context, deviceIdentifier *device.DeviceIdentifier, beginD
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

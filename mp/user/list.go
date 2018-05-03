@@ -3,7 +3,7 @@ package user
 import (
 	"net/url"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 获取用户列表返回的数据结构
@@ -21,7 +21,7 @@ type ListResult struct {
 
 // List 获取用户列表.
 //  NOTE: 每次最多能获取 10000 个用户, 可以多次指定 nextOpenId 来获取以满足需求, 如果 nextOpenId == "" 则表示从头获取
-func List(clt *core.Context, nextOpenId string) (rslt *ListResult, err error) {
+func List(clt *mp.Context, nextOpenId string) (rslt *ListResult, err error) {
 	var incompleteURL string
 	if nextOpenId == "" {
 		incompleteURL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token="
@@ -30,13 +30,13 @@ func List(clt *core.Context, nextOpenId string) (rslt *ListResult, err error) {
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		ListResult
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -61,7 +61,7 @@ func List(clt *core.Context, nextOpenId string) (rslt *ListResult, err error) {
 //      // TODO: 增加你的代码
 //  }
 type UserIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	lastListResult *ListResult
 	nextPageCalled bool
@@ -97,7 +97,7 @@ func (iter *UserIterator) NextPage() (openIdList []string, err error) {
 }
 
 // NewUserIterator 获取用户遍历器, 从 nextOpenId 开始遍历, 如果 nextOpenId == "" 则表示从头遍历.
-func NewUserIterator(clt *core.Context, nextOpenId string) (iter *UserIterator, err error) {
+func NewUserIterator(clt *mp.Context, nextOpenId string) (iter *UserIterator, err error) {
 	// 逻辑上相当于第一次调用 UserIterator.NextPage,
 	// 因为第一次调用 UserIterator.HasNext 需要数据支撑, 所以提前获取了数据
 	rslt, err := List(clt, nextOpenId)

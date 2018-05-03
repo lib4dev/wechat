@@ -1,13 +1,11 @@
 package code
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // 查询code.
-func Get(clt *core.Context, id *CardItemIdentifier) (info *CardItem, err error) {
+func Get(clt *mp.Context, id *CardItemIdentifier) (info *CardItem, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		CardItem
 	}
 
@@ -16,7 +14,7 @@ func Get(clt *core.Context, id *CardItemIdentifier) (info *CardItem, err error) 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

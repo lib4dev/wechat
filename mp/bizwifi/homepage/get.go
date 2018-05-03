@@ -1,7 +1,7 @@
 package homepage
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Homepage struct {
@@ -10,7 +10,7 @@ type Homepage struct {
 	URL        string `json:"url"`         // 商家主页链接
 }
 
-func Get(clt *core.Context, shopId int64) (homepage *Homepage, err error) {
+func Get(clt *mp.Context, shopId int64) (homepage *Homepage, err error) {
 	request := struct {
 		ShopId int64 `json:"shop_id"`
 	}{
@@ -18,7 +18,7 @@ func Get(clt *core.Context, shopId int64) (homepage *Homepage, err error) {
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Homepage `json:"data"`
 	}
 
@@ -27,7 +27,7 @@ func Get(clt *core.Context, shopId int64) (homepage *Homepage, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

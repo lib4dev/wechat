@@ -10,13 +10,13 @@ import (
 
 	"github.com/micro-plat/wechat/internal/debug/api"
 	"github.com/micro-plat/wechat/internal/debug/api/retry"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/util"
 )
 
 // Download 下载多媒体到文件.
 //  请注意, 视频文件不支持下载
-func Download(clt *core.Context, mediaId, filepath string) (written int64, err error) {
+func Download(clt *mp.Context, mediaId, filepath string) (written int64, err error) {
 	file, err := os.Create(filepath)
 	if err != nil {
 		return
@@ -33,14 +33,14 @@ func Download(clt *core.Context, mediaId, filepath string) (written int64, err e
 
 // DownloadToWriter 下载多媒体到 io.Writer.
 //  请注意, 视频文件不支持下载
-func DownloadToWriter(clt *core.Context, mediaId string, writer io.Writer) (written int64, err error) {
+func DownloadToWriter(clt *mp.Context, mediaId string, writer io.Writer) (written int64, err error) {
 	httpClient := clt.HttpClient
 	if httpClient == nil {
 		httpClient = util.DefaultMediaHttpClient
 	}
 
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/media/get?media_id=" + url.QueryEscape(mediaId) + "&access_token="
-	var errorResult core.Error
+	var errorResult mp.Error
 
 	token, err := clt.Token()
 	if err != nil {
@@ -59,13 +59,13 @@ RETRY:
 	}
 
 	switch errorResult.ErrCode {
-	case core.ErrCodeOK:
+	case mp.ErrCodeOK:
 		return // 基本不会出现
-	case core.ErrCodeInvalidCredential, core.ErrCodeAccessTokenExpired:
+	case mp.ErrCodeInvalidCredential, mp.ErrCodeAccessTokenExpired:
 		retry.DebugPrintError(errorResult.ErrCode, errorResult.ErrMsg, token)
 		if !hasRetried {
 			hasRetried = true
-			errorResult = core.Error{}
+			errorResult = mp.Error{}
 			if token, err = clt.RefreshToken(token); err != nil {
 				return
 			}
@@ -80,7 +80,7 @@ RETRY:
 	}
 }
 
-func httpDownloadToWriter(clt *http.Client, url string, writer io.Writer, errorResult *core.Error) (written int64, err error) {
+func httpDownloadToWriter(clt *http.Client, url string, writer io.Writer, errorResult *mp.Error) (written int64, err error) {
 	api.DebugPrintGetRequest(url)
 	httpResp, err := clt.Get(url)
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 func TestTextMessage(t *testing.T) {
@@ -17,7 +17,7 @@ func TestTextMessage(t *testing.T) {
 <MsgId>6260957665266699303</MsgId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -25,7 +25,7 @@ func TestTextMessage(t *testing.T) {
 	var haveObject = GetText(mixedMsg)
 
 	var wantObject = &Text{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742803,
@@ -50,7 +50,7 @@ func TestImageMessage(t *testing.T) {
 <MediaId><![CDATA[XbQZ2aq1i7G6ZPZzP8DoySg25X5iDcjefx_cbO3kFzww5I9Y_NgNVSsDqte1ZNOR]]></MediaId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -58,7 +58,7 @@ func TestImageMessage(t *testing.T) {
 	var haveObject = GetImage(mixedMsg)
 
 	var wantObject = &Image{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742821,
@@ -85,7 +85,7 @@ func TestVoiceMessage(t *testing.T) {
 <Recognition><![CDATA[傻逼！]]></Recognition>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -93,7 +93,7 @@ func TestVoiceMessage(t *testing.T) {
 	var haveObject = GetVoice(mixedMsg)
 
 	var wantObject = &Voice{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742830,
@@ -120,7 +120,7 @@ func TestVideoMessage(t *testing.T) {
 <MsgId>1234567890123456</MsgId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -128,7 +128,7 @@ func TestVideoMessage(t *testing.T) {
 	var haveObject = GetVideo(mixedMsg)
 
 	var wantObject = &Video{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "toUser",
 			FromUserName: "fromUser",
 			CreateTime:   1357290913,
@@ -154,7 +154,7 @@ func TestShortVideoMessage(t *testing.T) {
 <MsgId>6260957892899965999</MsgId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -162,7 +162,7 @@ func TestShortVideoMessage(t *testing.T) {
 	var haveObject = GetShortVideo(mixedMsg)
 
 	var wantObject = &ShortVideo{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742856,
@@ -190,7 +190,7 @@ func TestLocationMessage(t *testing.T) {
 <MsgId>6260958056108723257</MsgId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -198,7 +198,7 @@ func TestLocationMessage(t *testing.T) {
 	var haveObject = GetLocation(mixedMsg)
 
 	var wantObject = &Location{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742894,
@@ -227,7 +227,7 @@ func TestLinkMessage(t *testing.T) {
 <MsgId>6260958142008069179</MsgId>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -235,7 +235,7 @@ func TestLinkMessage(t *testing.T) {
 	var haveObject = GetLink(mixedMsg)
 
 	var wantObject = &Link{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457742914,

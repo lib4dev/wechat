@@ -5,11 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // UploadHeadImage 上传客服头像.
-func UploadHeadImage(clt *core.Context, kfAccount, imageFilePath string) (err error) {
+func UploadHeadImage(clt *mp.Context, kfAccount, imageFilePath string) (err error) {
 	file, err := os.Open(imageFilePath)
 	if err != nil {
 		return
@@ -21,24 +21,24 @@ func UploadHeadImage(clt *core.Context, kfAccount, imageFilePath string) (err er
 
 // UploadHeadImageFromReader 上传客服头像.
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadHeadImageFromReader(clt *core.Context, kfAccount, filename string, reader io.Reader) (err error) {
+func UploadHeadImageFromReader(clt *mp.Context, kfAccount, filename string, reader io.Reader) (err error) {
 	// TODO
 	//	incompleteURL := "https://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?kf_account=" +
 	//		url.QueryEscape(kfAccount) + "&access_token="
 	incompleteURL := "https://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?kf_account=" +
 		kfAccount + "&access_token="
 
-	var fields = []core.MultipartFormField{{
+	var fields = []mp.MultipartFormField{{
 		IsFile:   true,
 		Name:     "media",
 		FileName: filename,
 		Value:    reader,
 	}}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

@@ -1,12 +1,10 @@
 package mpnews
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // 获取卡券嵌入图文消息的标准格式代码.
 //  将返回代码填入上传图文素材接口中content字段，即可获取嵌入卡券的图文消息素材。
-func GetHTML(clt *core.Context, cardId string) (content string, err error) {
+func GetHTML(clt *mp.Context, cardId string) (content string, err error) {
 	request := struct {
 		CardId string `json:"card_id"`
 	}{
@@ -14,7 +12,7 @@ func GetHTML(clt *core.Context, cardId string) (content string, err error) {
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		Content string `json:"content"`
 	}
 
@@ -23,7 +21,7 @@ func GetHTML(clt *core.Context, cardId string) (content string, err error) {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

@@ -1,13 +1,11 @@
 package code
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 // 核销Code接口.
-func Consume(clt *core.Context, id *CardItemIdentifier) (cardId, openId string, err error) {
+func Consume(clt *mp.Context, id *CardItemIdentifier) (cardId, openId string, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		Card struct {
 			CardId string `json:"card_id"`
 		} `json:"card"`
@@ -19,7 +17,7 @@ func Consume(clt *core.Context, id *CardItemIdentifier) (cardId, openId string, 
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

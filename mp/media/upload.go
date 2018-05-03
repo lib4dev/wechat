@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
@@ -23,41 +23,41 @@ type MediaInfo struct {
 }
 
 // UploadImage 上传多媒体图片
-func UploadImage(clt *core.Context, filepath string) (info *MediaInfo, err error) {
+func UploadImage(clt *mp.Context, filepath string) (info *MediaInfo, err error) {
 	return upload(clt, MediaTypeImage, filepath)
 }
 
 // UploadImageFromReader 上传多媒体图片
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadImageFromReader(clt *core.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
+func UploadImageFromReader(clt *mp.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
 	return uploadFromReader(clt, MediaTypeImage, filename, reader)
 }
 
 // UploadVoice 上传多媒体语音
-func UploadVoice(clt *core.Context, filepath string) (info *MediaInfo, err error) {
+func UploadVoice(clt *mp.Context, filepath string) (info *MediaInfo, err error) {
 	return upload(clt, MediaTypeVoice, filepath)
 }
 
 // UploadVoiceFromReader 上传多媒体语音
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadVoiceFromReader(clt *core.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
+func UploadVoiceFromReader(clt *mp.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
 	return uploadFromReader(clt, MediaTypeVoice, filename, reader)
 }
 
 // UploadVideo 上传多媒体视频
-func UploadVideo(clt *core.Context, filepath string) (info *MediaInfo, err error) {
+func UploadVideo(clt *mp.Context, filepath string) (info *MediaInfo, err error) {
 	return upload(clt, MediaTypeVideo, filepath)
 }
 
 // UploadVideoFromReader 上传多媒体视频
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadVideoFromReader(clt *core.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
+func UploadVideoFromReader(clt *mp.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
 	return uploadFromReader(clt, MediaTypeVideo, filename, reader)
 }
 
 // =====================================================================================================================
 
-func upload(clt *core.Context, mediaType, _filepath string) (info *MediaInfo, err error) {
+func upload(clt *mp.Context, mediaType, _filepath string) (info *MediaInfo, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -67,10 +67,10 @@ func upload(clt *core.Context, mediaType, _filepath string) (info *MediaInfo, er
 	return uploadFromReader(clt, mediaType, filepath.Base(_filepath), file)
 }
 
-func uploadFromReader(clt *core.Context, mediaType, filename string, reader io.Reader) (info *MediaInfo, err error) {
+func uploadFromReader(clt *mp.Context, mediaType, filename string, reader io.Reader) (info *MediaInfo, err error) {
 	var incompleteURL = "https://api.weixin.qq.com/cgi-bin/media/upload?type=" + mediaType + "&access_token="
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -79,13 +79,13 @@ func uploadFromReader(clt *core.Context, mediaType, filename string, reader io.R
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaInfo
 	}
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -96,7 +96,7 @@ func uploadFromReader(clt *core.Context, mediaType, filename string, reader io.R
 // =====================================================================================================================
 
 // UploadThumb 上传多媒体缩略图
-func UploadThumb(clt *core.Context, _filepath string) (info *MediaInfo, err error) {
+func UploadThumb(clt *mp.Context, _filepath string) (info *MediaInfo, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -108,10 +108,10 @@ func UploadThumb(clt *core.Context, _filepath string) (info *MediaInfo, err erro
 
 // UploadThumbFromReader 上传多媒体缩略图.
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
+func UploadThumbFromReader(clt *mp.Context, filename string, reader io.Reader) (info *MediaInfo, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/media/upload?type=thumb&access_token="
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -120,7 +120,7 @@ func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader)
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaType string `json:"type"`
 		MediaId   string `json:"thumb_media_id"`
 		CreatedAt int64  `json:"created_at"`
@@ -128,7 +128,7 @@ func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader)
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

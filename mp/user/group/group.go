@@ -2,7 +2,7 @@
 package group
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Group struct {
@@ -12,7 +12,7 @@ type Group struct {
 }
 
 // Create 创建分组.
-func Create(clt *core.Context, name string) (group *Group, err error) {
+func Create(clt *mp.Context, name string) (group *Group, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/create?access_token="
 
 	var request struct {
@@ -23,13 +23,13 @@ func Create(clt *core.Context, name string) (group *Group, err error) {
 	request.Group.Name = name
 
 	var result struct {
-		core.Error
+		mp.Error
 		Group `json:"group"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -39,7 +39,7 @@ func Create(clt *core.Context, name string) (group *Group, err error) {
 }
 
 // Delete 删除分组.
-func Delete(clt *core.Context, groupId int64) (err error) {
+func Delete(clt *mp.Context, groupId int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token="
 
 	var request struct {
@@ -49,11 +49,11 @@ func Delete(clt *core.Context, groupId int64) (err error) {
 	}
 	request.Group.Id = groupId
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -61,7 +61,7 @@ func Delete(clt *core.Context, groupId int64) (err error) {
 }
 
 // Update 修改分组名.
-func Update(clt *core.Context, groupId int64, name string) (err error) {
+func Update(clt *mp.Context, groupId int64, name string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/update?access_token="
 
 	var request struct {
@@ -73,11 +73,11 @@ func Update(clt *core.Context, groupId int64, name string) (err error) {
 	request.Group.Id = groupId
 	request.Group.Name = name
 
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -85,17 +85,17 @@ func Update(clt *core.Context, groupId int64, name string) (err error) {
 }
 
 // List 查询所有分组.
-func List(clt *core.Context) (groups []Group, err error) {
+func List(clt *mp.Context) (groups []Group, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		Groups []Group `json:"groups"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

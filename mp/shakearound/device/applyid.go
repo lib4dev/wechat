@@ -1,7 +1,7 @@
 package device
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type ApplyIdParameters struct {
@@ -18,9 +18,9 @@ type ApplyIdResult struct {
 }
 
 // 申请设备ID
-func ApplyId(clt *core.Context, para *ApplyIdParameters) (rslt *ApplyIdResult, err error) {
+func ApplyId(clt *mp.Context, para *ApplyIdParameters) (rslt *ApplyIdResult, err error) {
 	var result struct {
-		core.Error
+		mp.Error
 		ApplyIdResult `json:"data"`
 	}
 
@@ -29,7 +29,7 @@ func ApplyId(clt *core.Context, para *ApplyIdParameters) (rslt *ApplyIdResult, e
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

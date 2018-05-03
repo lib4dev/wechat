@@ -3,25 +3,25 @@ package shakearound
 import (
 	"unsafe"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
 	// 推送到公众号URL上的事件类型
-	EventTypeUserShake core.EventType = "ShakearoundUserShake" // 摇一摇事件通知
+	EventTypeUserShake mp.EventType = "ShakearoundUserShake" // 摇一摇事件通知
 )
 
 type UserShakeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 
-	EventType core.EventType `xml:"Event" json:"Event"` // 事件类型，ShakearoundUserShake
+	EventType mp.EventType `xml:"Event" json:"Event"` // 事件类型，ShakearoundUserShake
 
 	ChosenBeacon  *ChosenBeacon  `xml:"ChosenBeacon,omitempty" json:"ChosenBeacon,omitempty"`
 	AroundBeacons []AroundBeacon `xml:"AroundBeacons>AroundBeacon,omitempty" json:"AroundBeacons,omitempty"`
 }
 
-// 和 github.com/micro-plat/wechat/mp/core.MixedMsg.ChosenBeacon 一样, 同步修改
+// 和 github.com/micro-plat/wechat/mp/mp.MixedMsg.ChosenBeacon 一样, 同步修改
 type ChosenBeacon struct {
 	UUID     string  `xml:"Uuid"     json:"Uuid"`
 	Major    int     `xml:"Major"    json:"Major"`
@@ -29,7 +29,7 @@ type ChosenBeacon struct {
 	Distance float64 `xml:"Distance" json:"Distance"`
 }
 
-// 和 github.com/micro-plat/wechat/mp/core.MixedMsg.AroundBeacon 一样, 同步修改
+// 和 github.com/micro-plat/wechat/mp/mp.MixedMsg.AroundBeacon 一样, 同步修改
 type AroundBeacon struct {
 	UUID     string  `xml:"Uuid"     json:"Uuid"`
 	Major    int     `xml:"Major"    json:"Major"`
@@ -37,7 +37,7 @@ type AroundBeacon struct {
 	Distance float64 `xml:"Distance" json:"Distance"`
 }
 
-func GetUserShakeEvent(msg *core.MixedMsg) *UserShakeEvent {
+func GetUserShakeEvent(msg *mp.MixedMsg) *UserShakeEvent {
 	return &UserShakeEvent{
 		MsgHeader:     msg.MsgHeader,
 		EventType:     msg.EventType,

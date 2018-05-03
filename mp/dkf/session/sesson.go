@@ -4,14 +4,14 @@ package session
 import (
 	"net/url"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // Create 创建会话.
 //  openId:    必须, 客户openid
 //  kfAccount: 必须, 完整客服账号，格式为：账号前缀@公众号微信号
 //  text:      可选, 附加信息，文本会展示在客服人员的多客服客户端
-func Create(clt *core.Context, openId, kfAccount, text string) (err error) {
+func Create(clt *mp.Context, openId, kfAccount, text string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/kfsession/create?access_token="
 
 	request := struct {
@@ -23,11 +23,11 @@ func Create(clt *core.Context, openId, kfAccount, text string) (err error) {
 		OpenId:    openId,
 		Text:      text,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -38,7 +38,7 @@ func Create(clt *core.Context, openId, kfAccount, text string) (err error) {
 //  openId:    必须, 客户openid
 //  kfAccount: 必须, 完整客服账号，格式为：账号前缀@公众号微信号
 //  text:      可选, 附加信息，文本会展示在客服人员的多客服客户端
-func Close(clt *core.Context, openId, kfAccount, text string) (err error) {
+func Close(clt *mp.Context, openId, kfAccount, text string) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/kfsession/close?access_token="
 
 	request := struct {
@@ -50,11 +50,11 @@ func Close(clt *core.Context, openId, kfAccount, text string) (err error) {
 		OpenId:    openId,
 		Text:      text,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -68,18 +68,18 @@ type Session struct {
 }
 
 // Get 获取客户的会话
-func Get(clt *core.Context, openId string) (ss *Session, err error) {
+func Get(clt *mp.Context, openId string) (ss *Session, err error) {
 	incompleteURL := "https://api.weixin.qq.com/customservice/kfsession/getsession?openid=" +
 		url.QueryEscape(openId) + "&access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		Session
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -89,7 +89,7 @@ func Get(clt *core.Context, openId string) (ss *Session, err error) {
 }
 
 // List 获取客服的会话列表, 开发者可以通过本接口获取某个客服正在接待的会话列表.
-func List(clt *core.Context, kfAccount string) (list []Session, err error) {
+func List(clt *mp.Context, kfAccount string) (list []Session, err error) {
 	// TODO
 	//	incompleteURL := "https://api.weixin.qq.com/customservice/kfsession/getsessionlist?kf_account=" +
 	//		url.QueryEscape(kfAccount) + "&access_token="
@@ -97,13 +97,13 @@ func List(clt *core.Context, kfAccount string) (list []Session, err error) {
 		kfAccount + "&access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		SessionList []Session `json:"sessionlist"`
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -121,17 +121,17 @@ type WaitCaseListResult struct {
 }
 
 // WaitCaseList 获取未接入会话列表.
-func WaitCaseList(clt *core.Context) (rslt *WaitCaseListResult, err error) {
+func WaitCaseList(clt *mp.Context) (rslt *WaitCaseListResult, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/kfsession/getwaitcase?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		WaitCaseListResult
 	}
 	if err = clt.GetJSON(incompleteURL, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

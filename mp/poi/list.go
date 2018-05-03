@@ -3,7 +3,7 @@ package poi
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type ListResult struct {
@@ -15,7 +15,7 @@ type ListResult struct {
 // List 查询门店列表.
 //  begin: 开始位置，0 即为从第一条开始查询
 //  limit: 返回数据条数，最大允许50，默认为20
-func List(clt *core.Context, begin, limit int) (rslt *ListResult, err error) {
+func List(clt *mp.Context, begin, limit int) (rslt *ListResult, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/poi/getpoilist?access_token="
 
 	if begin < 0 {
@@ -35,13 +35,13 @@ func List(clt *core.Context, begin, limit int) (rslt *ListResult, err error) {
 		Limit: limit,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		ListResult
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -67,7 +67,7 @@ func List(clt *core.Context, begin, limit int) (rslt *ListResult, err error) {
 //      // TODO: 增加你的代码
 //  }
 type PoiIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextOffset int
 	count      int
@@ -106,7 +106,7 @@ func (iter *PoiIterator) NextPage() (list []Poi, err error) {
 	return
 }
 
-func NewPoiIterator(clt *core.Context, begin, limit int) (iter *PoiIterator, err error) {
+func NewPoiIterator(clt *mp.Context, begin, limit int) (iter *PoiIterator, err error) {
 	// 逻辑上相当于第一次调用 PoiIterator.NextPage,
 	// 因为第一次调用 PoiIterator.HasNext 需要数据支撑, 所以提前获取了数据
 	rslt, err := List(clt, begin, limit)

@@ -1,8 +1,6 @@
 package testwhitelist
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type SetParameters struct {
 	OpenIdList   []string `json:"openid,omitempty"`   // 测试的openid列表
@@ -10,15 +8,15 @@ type SetParameters struct {
 }
 
 // 设置测试白名单
-func Set(clt *core.Context, para *SetParameters) (err error) {
-	var result core.Error
+func Set(clt *mp.Context, para *SetParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/card/testwhitelist/set?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 func TestUnsubscribeEvent(t *testing.T) {
@@ -17,7 +17,7 @@ func TestUnsubscribeEvent(t *testing.T) {
 <EventKey><![CDATA[]]></EventKey>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -25,7 +25,7 @@ func TestUnsubscribeEvent(t *testing.T) {
 	var haveObject = GetUnsubscribeEvent(mixedMsg)
 
 	var wantObject = &UnsubscribeEvent{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457752129,
@@ -49,7 +49,7 @@ func TestSubscribeEvent(t *testing.T) {
 <EventKey><![CDATA[]]></EventKey>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -57,7 +57,7 @@ func TestSubscribeEvent(t *testing.T) {
 	var haveObject = GetSubscribeEvent(mixedMsg)
 
 	var wantObject = &SubscribeEvent{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457752147,
@@ -81,7 +81,7 @@ func TestSubscribeEvent(t *testing.T) {
 <Ticket><![CDATA[gQHr8ToAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzMwT19GN2ZsSkkxZFBGTkpkMjEzAAIEIYnjVgMECAcAAA==]]></Ticket>
 </xml>`)
 
-	mixedMsg = &core.MixedMsg{}
+	mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -89,7 +89,7 @@ func TestSubscribeEvent(t *testing.T) {
 	haveObject = GetSubscribeEvent(mixedMsg)
 
 	wantObject = &SubscribeEvent{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457752430,
@@ -115,7 +115,7 @@ func TestScanEvent(t *testing.T) {
 <Ticket><![CDATA[gQHr8ToAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzMwT19GN2ZsSkkxZFBGTkpkMjEzAAIEIYnjVgMECAcAAA==]]></Ticket>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -123,7 +123,7 @@ func TestScanEvent(t *testing.T) {
 	var haveObject = GetScanEvent(mixedMsg)
 
 	var wantObject = &ScanEvent{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457752395,
@@ -150,7 +150,7 @@ func TestLocationEvent(t *testing.T) {
 <Precision>2703.000000</Precision>
 </xml>`)
 
-	var mixedMsg = &core.MixedMsg{}
+	var mixedMsg = &mp.MixedMsg{}
 	if err := xml.Unmarshal(msg, mixedMsg); err != nil {
 		t.Errorf("unmarshal failed: %s\n", err.Error())
 		return
@@ -158,7 +158,7 @@ func TestLocationEvent(t *testing.T) {
 	var haveObject = GetLocationEvent(mixedMsg)
 
 	var wantObject = &LocationEvent{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   "gh_21ee2dc92d7d",
 			FromUserName: "os-IKuHd9pJ6xsn4mS7GyL4HxqI4",
 			CreateTime:   1457752531,

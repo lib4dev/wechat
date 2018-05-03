@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 // image ===============================================================================================================
 
 // UploadImage 上传多媒体图片
-func UploadImage(clt *core.Context, _filepath string) (mediaId, url string, err error) {
+func UploadImage(clt *mp.Context, _filepath string) (mediaId, url string, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -33,10 +33,10 @@ func UploadImage(clt *core.Context, _filepath string) (mediaId, url string, err 
 
 // UploadImageFromReader 上传多媒体图片
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadImageFromReader(clt *core.Context, filename string, reader io.Reader) (mediaId, url string, err error) {
+func UploadImageFromReader(clt *mp.Context, filename string, reader io.Reader) (mediaId, url string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/add_material?type=image&access_token="
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -45,14 +45,14 @@ func UploadImageFromReader(clt *core.Context, filename string, reader io.Reader)
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaId string `json:"media_id"`
 		URL     string `json:"url"`
 	}
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -64,7 +64,7 @@ func UploadImageFromReader(clt *core.Context, filename string, reader io.Reader)
 // thumb ===============================================================================================================
 
 // UploadThumb 上传多媒体缩略图
-func UploadThumb(clt *core.Context, _filepath string) (mediaId, url string, err error) {
+func UploadThumb(clt *mp.Context, _filepath string) (mediaId, url string, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -76,10 +76,10 @@ func UploadThumb(clt *core.Context, _filepath string) (mediaId, url string, err 
 
 // UploadThumbFromReader 上传多媒体缩略图
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader) (mediaId, url string, err error) {
+func UploadThumbFromReader(clt *mp.Context, filename string, reader io.Reader) (mediaId, url string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/add_material?type=thumb&access_token="
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -88,14 +88,14 @@ func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader)
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaId string `json:"media_id"`
 		URL     string `json:"url"`
 	}
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -107,7 +107,7 @@ func UploadThumbFromReader(clt *core.Context, filename string, reader io.Reader)
 // voice ===============================================================================================================
 
 // UploadVoice 上传多媒体语音
-func UploadVoice(clt *core.Context, _filepath string) (mediaId string, err error) {
+func UploadVoice(clt *mp.Context, _filepath string) (mediaId string, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -119,10 +119,10 @@ func UploadVoice(clt *core.Context, _filepath string) (mediaId string, err error
 
 // UploadVoiceFromReader 上传多媒体语音
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadVoiceFromReader(clt *core.Context, filename string, reader io.Reader) (mediaId string, err error) {
+func UploadVoiceFromReader(clt *mp.Context, filename string, reader io.Reader) (mediaId string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/add_material?type=voice&access_token="
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -131,13 +131,13 @@ func UploadVoiceFromReader(clt *core.Context, filename string, reader io.Reader)
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaId string `json:"media_id"`
 	}
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -148,7 +148,7 @@ func UploadVoiceFromReader(clt *core.Context, filename string, reader io.Reader)
 // video ===============================================================================================================
 
 // UploadVideo 上传多媒体视频.
-func UploadVideo(clt *core.Context, _filepath string, title, introduction string) (mediaId string, err error) {
+func UploadVideo(clt *mp.Context, _filepath string, title, introduction string) (mediaId string, err error) {
 	file, err := os.Open(_filepath)
 	if err != nil {
 		return
@@ -160,7 +160,7 @@ func UploadVideo(clt *core.Context, _filepath string, title, introduction string
 
 // UploadVideoFromReader 上传多媒体缩视频.
 //  NOTE: 参数 filename 不是文件路径, 是 multipart/form-data 里面 filename 的值.
-func UploadVideoFromReader(clt *core.Context, filename string, reader io.Reader, title, introduction string) (mediaId string, err error) {
+func UploadVideoFromReader(clt *mp.Context, filename string, reader io.Reader, title, introduction string) (mediaId string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/add_material?type=video&access_token="
 
 	buffer := bytes.NewBuffer(make([]byte, 0, 256))
@@ -179,7 +179,7 @@ func UploadVideoFromReader(clt *core.Context, filename string, reader io.Reader,
 	}
 	descriptionBytes := buffer.Bytes()
 
-	var fields = []core.MultipartFormField{
+	var fields = []mp.MultipartFormField{
 		{
 			IsFile:   true,
 			Name:     "media",
@@ -193,13 +193,13 @@ func UploadVideoFromReader(clt *core.Context, filename string, reader io.Reader,
 		},
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		MediaId string `json:"media_id"`
 	}
 	if err = clt.PostMultipartForm(incompleteURL, fields, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

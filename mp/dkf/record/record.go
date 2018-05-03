@@ -4,7 +4,7 @@ package record
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Record struct {
@@ -24,7 +24,7 @@ type GetRequest struct {
 }
 
 // Get 获取客服聊天记录
-func Get(clt *core.Context, request *GetRequest) (list []Record, err error) {
+func Get(clt *mp.Context, request *GetRequest) (list []Record, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/customservice/msgrecord/getrecord?access_token="
 
 	if request.PageIndex < 1 {
@@ -37,13 +37,13 @@ func Get(clt *core.Context, request *GetRequest) (list []Record, err error) {
 	}
 
 	var result struct {
-		core.Error
+		mp.Error
 		RecordList []Record `json:"recordlist"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

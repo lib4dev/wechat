@@ -1,8 +1,6 @@
 package movieticket
 
-import (
-	"github.com/micro-plat/wechat/mp/core"
-)
+import "github.com/micro-plat/wechat/mp"
 
 type UpdateUserParameters struct {
 	Code   string `json:"code"`              // 必须; 卡券Code码。
@@ -16,15 +14,15 @@ type UpdateUserParameters struct {
 }
 
 // 更新电影票
-func UpdateUser(clt *core.Context, para *UpdateUserParameters) (err error) {
-	var result core.Error
+func UpdateUser(clt *mp.Context, para *UpdateUserParameters) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/card/movieticket/updateuser?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

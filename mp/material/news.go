@@ -3,7 +3,7 @@ package material
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type Article struct {
@@ -22,17 +22,17 @@ type News struct {
 }
 
 // 新增永久图文素材.
-func AddNews(clt *core.Context, news *News) (mediaId string, err error) {
+func AddNews(clt *mp.Context, news *News) (mediaId string, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token="
 
 	var result struct {
-		core.Error
+		mp.Error
 		MediaId string `json:"media_id"`
 	}
 	if err = clt.PostJSON(incompleteURL, news, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -41,7 +41,7 @@ func AddNews(clt *core.Context, news *News) (mediaId string, err error) {
 }
 
 // 获取永久图文素材.
-func GetNews(clt *core.Context, mediaId string) (news *News, err error) {
+func GetNews(clt *mp.Context, mediaId string) (news *News, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token="
 
 	var request = struct {
@@ -50,13 +50,13 @@ func GetNews(clt *core.Context, mediaId string) (news *News, err error) {
 		MediaId: mediaId,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		Articles []Article `json:"news_item"`
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -67,7 +67,7 @@ func GetNews(clt *core.Context, mediaId string) (news *News, err error) {
 }
 
 // 修改永久图文素材.
-func UpdateNews(clt *core.Context, mediaId string, index int, article *Article) (err error) {
+func UpdateNews(clt *mp.Context, mediaId string, index int, article *Article) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/update_news?access_token="
 
 	var request = struct {
@@ -79,11 +79,11 @@ func UpdateNews(clt *core.Context, mediaId string, index int, article *Article) 
 		Index:   index,
 		Article: article,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -107,7 +107,7 @@ type NewsInfo struct {
 // 获取图文素材列表.
 //  offset: 从全部素材的该偏移位置开始返回, 0表示从第一个素材
 //  count:  返回素材的数量, 取值在1到20之间
-func BatchGetNews(clt *core.Context, offset, count int) (rslt *BatchGetNewsResult, err error) {
+func BatchGetNews(clt *mp.Context, offset, count int) (rslt *BatchGetNewsResult, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token="
 
 	if offset < 0 {
@@ -129,13 +129,13 @@ func BatchGetNews(clt *core.Context, offset, count int) (rslt *BatchGetNewsResul
 		Count:        count,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		BatchGetNewsResult
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}
@@ -160,7 +160,7 @@ func BatchGetNews(clt *core.Context, offset, count int) (rslt *BatchGetNewsResul
 //      // TODO: 增加你的代码
 //  }
 type NewsIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextOffset int
 	count      int
@@ -199,7 +199,7 @@ func (iter *NewsIterator) NextPage() (items []NewsInfo, err error) {
 	return
 }
 
-func NewNewsIterator(clt *core.Context, offset, count int) (iter *NewsIterator, err error) {
+func NewNewsIterator(clt *mp.Context, offset, count int) (iter *NewsIterator, err error) {
 	// 逻辑上相当于第一次调用 NewsIterator.NextPage,
 	// 因为第一次调用 NewsIterator.HasNext 需要数据支撑, 所以提前获取了数据
 	rslt, err := BatchGetNews(clt, offset, count)

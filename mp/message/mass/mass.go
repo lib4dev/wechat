@@ -1,7 +1,7 @@
 package mass
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 群发结果
@@ -14,7 +14,7 @@ type Result struct {
 }
 
 // Delete 删除群发.
-func Delete(clt *core.Context, msgid int64) (err error) {
+func Delete(clt *mp.Context, msgid int64) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/message/mass/delete?access_token="
 
 	var request = struct {
@@ -22,11 +22,11 @@ func Delete(clt *core.Context, msgid int64) (err error) {
 	}{
 		MsgId: msgid,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
@@ -39,7 +39,7 @@ type Status struct {
 }
 
 // GetStatus 查询群发消息发送状态.
-func GetStatus(clt *core.Context, msgid int64) (status *Status, err error) {
+func GetStatus(clt *mp.Context, msgid int64) (status *Status, err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/message/mass/get?access_token="
 
 	var request = struct {
@@ -48,13 +48,13 @@ func GetStatus(clt *core.Context, msgid int64) (status *Status, err error) {
 		MsgId: msgid,
 	}
 	var result struct {
-		core.Error
+		mp.Error
 		Status
 	}
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result.Error
 		return
 	}

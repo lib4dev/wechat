@@ -1,7 +1,7 @@
 package record
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // RecordIterator
@@ -19,7 +19,7 @@ import (
 //      // TODO: 增加你的代码
 //  }
 type RecordIterator struct {
-	clt *core.Context
+	clt *mp.Context
 
 	nextGetRequest *GetRequest
 
@@ -51,7 +51,7 @@ func (iter *RecordIterator) NextPage() (records []Record, err error) {
 	return
 }
 
-func NewRecordIterator(clt *core.Context, request *GetRequest) (iter *RecordIterator, err error) {
+func NewRecordIterator(clt *mp.Context, request *GetRequest) (iter *RecordIterator, err error) {
 	// 逻辑上相当于第一次调用 RecordIterator.NextPage,
 	// 因为第一次调用 RecordIterator.HasNext 需要数据支撑, 所以提前获取了数据
 	records, err := Get(clt, request)

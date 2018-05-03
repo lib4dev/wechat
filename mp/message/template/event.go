@@ -1,11 +1,11 @@
 package template
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	EventTypeTemplateSendJobFinish core.EventType = "TEMPLATESENDJOBFINISH"
+	EventTypeTemplateSendJobFinish mp.EventType = "TEMPLATESENDJOBFINISH"
 )
 
 const (
@@ -16,13 +16,13 @@ const (
 
 type TemplateSendJobFinishEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
-	EventType core.EventType `xml:"Event"  json:"Event"`  // 此处为 TEMPLATESENDJOBFINISH
+	mp.MsgHeader
+	EventType mp.EventType `xml:"Event"  json:"Event"`  // 此处为 TEMPLATESENDJOBFINISH
 	MsgId     int64          `xml:"MsgId"  json:"MsgId"`  // 模板消息ID
 	Status    string         `xml:"Status" json:"Status"` // 发送状态
 }
 
-func GetTemplateSendJobFinishEvent(msg *core.MixedMsg) *TemplateSendJobFinishEvent {
+func GetTemplateSendJobFinishEvent(msg *mp.MixedMsg) *TemplateSendJobFinishEvent {
 	return &TemplateSendJobFinishEvent{
 		MsgHeader: msg.MsgHeader,
 		EventType: msg.EventType,

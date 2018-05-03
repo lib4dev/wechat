@@ -12,13 +12,13 @@ import (
 
 	"github.com/micro-plat/wechat/internal/debug/api"
 	"github.com/micro-plat/wechat/internal/debug/api/retry"
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 	"github.com/micro-plat/wechat/util"
 )
 
 // Download 下载多媒体到文件.
 //  对于视频素材, 先通过 GetVideo 得到 Video 信息, 然后通过 Video.DownloadURL 来下载
-func Download(clt *core.Context, mediaId, filepath string) (written int64, err error) {
+func Download(clt *mp.Context, mediaId, filepath string) (written int64, err error) {
 	file, err := os.Create(filepath)
 	if err != nil {
 		return
@@ -35,7 +35,7 @@ func Download(clt *core.Context, mediaId, filepath string) (written int64, err e
 
 // DownloadToWriter 下载多媒体到 io.Writer.
 //  对于视频素材, 先通过 GetVideo 得到 Video 信息, 然后通过 Video.DownloadURL 来下载
-func DownloadToWriter(clt *core.Context, mediaId string, writer io.Writer) (written int64, err error) {
+func DownloadToWriter(clt *mp.Context, mediaId string, writer io.Writer) (written int64, err error) {
 	httpClient := clt.HttpClient
 	if httpClient == nil {
 		httpClient = util.DefaultMediaHttpClient
@@ -55,7 +55,7 @@ func DownloadToWriter(clt *core.Context, mediaId string, writer io.Writer) (writ
 	}
 	requestBodyBytes := buffer.Bytes()
 
-	var errorResult core.Error
+	var errorResult mp.Error
 
 	// 先读取 64bytes 内容来判断返回的是不是错误信息
 	// {"errcode":40007,"errmsg":"invalid media_id"}
@@ -78,13 +78,13 @@ RETRY:
 	}
 
 	switch errorResult.ErrCode {
-	case core.ErrCodeOK:
+	case mp.ErrCodeOK:
 		return // 基本不会出现
-	case core.ErrCodeInvalidCredential, core.ErrCodeAccessTokenExpired:
+	case mp.ErrCodeInvalidCredential, mp.ErrCodeAccessTokenExpired:
 		retry.DebugPrintError(errorResult.ErrCode, errorResult.ErrMsg, token)
 		if !hasRetried {
 			hasRetried = true
-			errorResult = core.Error{}
+			errorResult = mp.Error{}
 			if token, err = clt.RefreshToken(token); err != nil {
 				return
 			}
@@ -105,7 +105,7 @@ var (
 	errRespBeginWithMsg  = []byte(`{"errmsg":"`)
 )
 
-func httpDownloadToWriter(clt *http.Client, url string, body []byte, buf []byte, writer io.Writer, errorResult *core.Error) (written int64, err error) {
+func httpDownloadToWriter(clt *http.Client, url string, body []byte, buf []byte, writer io.Writer, errorResult *mp.Error) (written int64, err error) {
 	api.DebugPrintPostJSONRequest(url, body)
 	httpResp, err := clt.Post(url, "application/json; charset=utf-8", bytes.NewReader(body))
 	if err != nil {

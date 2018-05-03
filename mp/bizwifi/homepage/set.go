@@ -1,7 +1,7 @@
 package homepage
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 // 默认模板
@@ -34,15 +34,15 @@ func NewSetParameters2(shopId int64, url string) interface{} {
 
 // 设置商家主页
 //  要求 para 经过 encoding/json 后满足指定的格式要求
-func Set(clt *core.Context, para interface{}) (err error) {
-	var result core.Error
+func Set(clt *mp.Context, para interface{}) (err error) {
+	var result mp.Error
 
 	incompleteURL := "https://api.weixin.qq.com/bizwifi/homepage/set?access_token="
 	if err = clt.PostJSON(incompleteURL, para, &result); err != nil {
 		return
 	}
 
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}

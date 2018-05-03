@@ -2,29 +2,29 @@
 package response
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 const (
-	MsgTypeText                    core.MsgType = "text"                      // 文本消息
-	MsgTypeImage                   core.MsgType = "image"                     // 图片消息
-	MsgTypeVoice                   core.MsgType = "voice"                     // 语音消息
-	MsgTypeVideo                   core.MsgType = "video"                     // 视频消息
-	MsgTypeMusic                   core.MsgType = "music"                     // 音乐消息
-	MsgTypeNews                    core.MsgType = "news"                      // 图文消息
-	MsgTypeTransferCustomerService core.MsgType = "transfer_customer_service" // 将消息转发到多客服
+	MsgTypeText                    mp.MsgType = "text"                      // 文本消息
+	MsgTypeImage                   mp.MsgType = "image"                     // 图片消息
+	MsgTypeVoice                   mp.MsgType = "voice"                     // 语音消息
+	MsgTypeVideo                   mp.MsgType = "video"                     // 视频消息
+	MsgTypeMusic                   mp.MsgType = "music"                     // 音乐消息
+	MsgTypeNews                    mp.MsgType = "news"                      // 图文消息
+	MsgTypeTransferCustomerService mp.MsgType = "transfer_customer_service" // 将消息转发到多客服
 )
 
 // 文本消息
 type Text struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	Content string `xml:"Content" json:"Content"` // 回复的消息内容(换行: 在content中能够换行, 微信客户端支持换行显示)
 }
 
 func NewText(to, from string, timestamp int64, content string) (text *Text) {
 	return &Text{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -37,7 +37,7 @@ func NewText(to, from string, timestamp int64, content string) (text *Text) {
 // 图片消息
 type Image struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	Image struct {
 		MediaId string `xml:"MediaId" json:"MediaId"` // 通过素材管理接口上传多媒体文件得到 MediaId
 	} `xml:"Image" json:"Image"`
@@ -45,7 +45,7 @@ type Image struct {
 
 func NewImage(to, from string, timestamp int64, mediaId string) (image *Image) {
 	image = &Image{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -59,7 +59,7 @@ func NewImage(to, from string, timestamp int64, mediaId string) (image *Image) {
 // 语音消息
 type Voice struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	Voice struct {
 		MediaId string `xml:"MediaId" json:"MediaId"` // 通过素材管理接口上传多媒体文件得到 MediaId
 	} `xml:"Voice" json:"Voice"`
@@ -67,7 +67,7 @@ type Voice struct {
 
 func NewVoice(to, from string, timestamp int64, mediaId string) (voice *Voice) {
 	voice = &Voice{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -81,7 +81,7 @@ func NewVoice(to, from string, timestamp int64, mediaId string) (voice *Voice) {
 // 视频消息
 type Video struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	Video struct {
 		MediaId     string `xml:"MediaId"               json:"MediaId"`               // 通过素材管理接口上传多媒体文件得到 MediaId
 		Title       string `xml:"Title,omitempty"       json:"Title,omitempty"`       // 视频消息的标题, 可以为空
@@ -91,7 +91,7 @@ type Video struct {
 
 func NewVideo(to, from string, timestamp int64, mediaId, title, description string) (video *Video) {
 	video = &Video{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -107,7 +107,7 @@ func NewVideo(to, from string, timestamp int64, mediaId, title, description stri
 // 音乐消息
 type Music struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	Music struct {
 		Title        string `xml:"Title,omitempty"        json:"Title,omitempty"`       // 音乐标题
 		Description  string `xml:"Description,omitempty"  json:"Description,omitempty"` // 音乐描述
@@ -119,7 +119,7 @@ type Music struct {
 
 func NewMusic(to, from string, timestamp int64, thumbMediaId, musicURL, HQMusicURL, title, description string) (music *Music) {
 	music = &Music{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -145,14 +145,14 @@ type Article struct {
 // 图文消息
 type News struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	ArticleCount int       `xml:"ArticleCount"            json:"ArticleCount"`       // 图文消息个数, 限制为10条以内
 	Articles     []Article `xml:"Articles>item,omitempty" json:"Articles,omitempty"` // 多条图文消息信息, 默认第一个item为大图, 注意, 如果图文数超过10, 则将会无响应
 }
 
 func NewNews(to, from string, timestamp int64, articles []Article) (news *News) {
 	news = &News{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,
@@ -167,7 +167,7 @@ func NewNews(to, from string, timestamp int64, articles []Article) (news *News) 
 // 将消息转发到多客服, 参见多客服模块
 type TransferToCustomerService struct {
 	XMLName struct{} `xml:"xml" json:"-"`
-	core.MsgHeader
+	mp.MsgHeader
 	TransInfo *TransInfo `xml:"TransInfo,omitempty" json:"TransInfo,omitempty"`
 }
 
@@ -178,7 +178,7 @@ type TransInfo struct {
 // 如果不指定客服则 kfAccount 留空.
 func NewTransferToCustomerService(to, from string, timestamp int64, kfAccount string) (msg *TransferToCustomerService) {
 	msg = &TransferToCustomerService{
-		MsgHeader: core.MsgHeader{
+		MsgHeader: mp.MsgHeader{
 			ToUserName:   to,
 			FromUserName: from,
 			CreateTime:   timestamp,

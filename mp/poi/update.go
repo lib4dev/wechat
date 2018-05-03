@@ -1,7 +1,7 @@
 package poi
 
 import (
-	"github.com/micro-plat/wechat/mp/core"
+	"github.com/micro-plat/wechat/mp"
 )
 
 type UpdateParameters struct {
@@ -22,7 +22,7 @@ type UpdateParameters struct {
 }
 
 // Update 修改门店服务信息.
-func Update(clt *core.Context, params *UpdateParameters) (err error) {
+func Update(clt *mp.Context, params *UpdateParameters) (err error) {
 	const incompleteURL = "https://api.weixin.qq.com/cgi-bin/poi/updatepoi?access_token="
 
 	var request = struct {
@@ -30,11 +30,11 @@ func Update(clt *core.Context, params *UpdateParameters) (err error) {
 	}{
 		UpdateParameters: params,
 	}
-	var result core.Error
+	var result mp.Error
 	if err = clt.PostJSON(incompleteURL, &request, &result); err != nil {
 		return
 	}
-	if result.ErrCode != core.ErrCodeOK {
+	if result.ErrCode != mp.ErrCodeOK {
 		err = &result
 		return
 	}
