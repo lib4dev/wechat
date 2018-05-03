@@ -30,10 +30,10 @@ var _ IAccessToken = (*DefaultAccessToken)(nil)
 //  2. 因为 DefaultAccessToken 同时也是一个简单的中控服务器, 而不是仅仅实现 AccessToken 接口,
 //     所以整个系统只能存在一个 DefaultAccessToken 实例!
 type DefaultAccessToken struct {
-	appId      string
-	appSecret  string
-	httpClient *http.Client
-
+	appId                    string
+	appSecret                string
+	httpClient               *http.Client
+	url                      string
 	refreshTokenRequestChan  chan string             // chan currentToken
 	refreshTokenResponseChan chan refreshTokenResult // chan {token, err}
 
@@ -42,19 +42,25 @@ type DefaultAccessToken struct {
 
 //NewDefaultAccessToken 创建一个新的DefaultAccessToken
 func NewDefaultAccessToken(appId, appSecret string) (srv *DefaultAccessToken) {
-	return NewDefaultAccessTokenByClient(appId, appSecret, nil)
+	return NewDefaultAccessTokenByClient(appId, appSecret, "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=", nil)
+}
+
+//NewDefaultAccessTokenByURL 创建一个新的DefaultAccessToken
+func NewDefaultAccessTokenByURL(appId, appSecret string, url string) (srv *DefaultAccessToken) {
+	return NewDefaultAccessTokenByClient(appId, appSecret, url, nil)
 }
 
 // NewDefaultAccessTokenByClient 创建一个新的 DefaultAccessToken, 如果 httpClient == nil 则默认使用 util.DefaultHttpClient.
-func NewDefaultAccessTokenByClient(appId, appSecret string, httpClient *http.Client) (srv *DefaultAccessToken) {
+func NewDefaultAccessTokenByClient(appId, appSecret string, u string, httpClient *http.Client) (srv *DefaultAccessToken) {
 	if httpClient == nil {
 		httpClient = util.DefaultHttpClient
 	}
 
 	srv = &DefaultAccessToken{
-		appId:                    url.QueryEscape(appId),
-		appSecret:                url.QueryEscape(appSecret),
-		httpClient:               httpClient,
+		appId:      url.QueryEscape(appId),
+		appSecret:  url.QueryEscape(appSecret),
+		httpClient: httpClient,
+		url:        u,
 		refreshTokenRequestChan:  make(chan string),
 		refreshTokenResponseChan: make(chan refreshTokenResult),
 	}
@@ -138,7 +144,7 @@ func (srv *DefaultAccessToken) updateToken(currentToken string) (token *accessTo
 		}
 	}
 
-	url := "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + srv.appId +
+	url := srv.url + srv.appId +
 		"&secret=" + srv.appSecret
 	api.DebugPrintGetRequest(url)
 	httpResp, err := srv.httpClient.Get(url)
