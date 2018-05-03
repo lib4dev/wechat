@@ -10,7 +10,7 @@ import (
 
 // Refund 申请退款.
 //  NOTE: 请求需要双向证书.
-func Refund(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func Refund(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/secapi/pay/refund", req)
 }
 
@@ -56,7 +56,7 @@ type RefundResponse struct {
 //  NOTE:
 //  1. 请求需要双向证书.
 //  2. 该函数不支持 代金券 功能, 如果有 代金券 功能请使用 Refund 函数.
-func Refund2(clt *mch.Client, req *RefundRequest) (resp *RefundResponse, err error) {
+func Refund2(clt *mch.Context, req *RefundRequest) (resp *RefundResponse, err error) {
 	m1 := make(map[string]string, 16)
 	if req.TransactionId != "" {
 		m1["transaction_id"] = req.TransactionId

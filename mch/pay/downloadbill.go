@@ -34,7 +34,7 @@ type DownloadBillRequest struct {
 }
 
 // 下载对账单到到文件.
-func DownloadBill(clt *mch.Client, filepath string, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func DownloadBill(clt *mch.Context, filepath string, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if req == nil {
 		return 0, errors.New("nil request req")
 	}
@@ -53,7 +53,7 @@ func DownloadBill(clt *mch.Client, filepath string, req *DownloadBillRequest, ht
 }
 
 // 下载对账单到 io.Writer.
-func DownloadBillToWriter(clt *mch.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func DownloadBillToWriter(clt *mch.Context, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if writer == nil {
 		return 0, errors.New("nil writer")
 	}
@@ -73,7 +73,7 @@ var (
 )
 
 // 下载对账单到 io.Writer.
-func downloadBillToWriter(clt *mch.Client, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
+func downloadBillToWriter(clt *mch.Context, writer io.Writer, req *DownloadBillRequest, httpClient *http.Client) (written int64, err error) {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultMediaHttpClient
 	}

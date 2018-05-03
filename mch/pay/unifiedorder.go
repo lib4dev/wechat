@@ -10,7 +10,7 @@ import (
 )
 
 // UnifiedOrder 统一下单.
-func UnifiedOrder(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func UnifiedOrder(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/pay/unifiedorder", req)
 }
 
@@ -56,7 +56,7 @@ type UnifiedOrderResponse struct {
 }
 
 // UnifiedOrder2 统一下单.
-func UnifiedOrder2(clt *mch.Client, req *UnifiedOrderRequest) (resp *UnifiedOrderResponse, err error) {
+func UnifiedOrder2(clt *mch.Context, req *UnifiedOrderRequest) (resp *UnifiedOrderResponse, err error) {
 	m1 := make(map[string]string, 24)
 	m1["body"] = req.Body
 	m1["out_trade_no"] = req.OutTradeNo

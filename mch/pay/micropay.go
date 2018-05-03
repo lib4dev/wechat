@@ -10,7 +10,7 @@ import (
 )
 
 // MicroPay 提交刷卡支付.
-func MicroPay(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func MicroPay(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/pay/micropay", req)
 }
 
@@ -63,7 +63,7 @@ type MicroPayResponse struct {
 }
 
 // MicroPay2 提交刷卡支付.
-func MicroPay2(clt *mch.Client, req *MicroPayRequest) (resp *MicroPayResponse, err error) {
+func MicroPay2(clt *mch.Context, req *MicroPayRequest) (resp *MicroPayResponse, err error) {
 	m1 := make(map[string]string, 24)
 	m1["body"] = req.Body
 	m1["out_trade_no"] = req.OutTradeNo

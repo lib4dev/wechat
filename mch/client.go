@@ -15,7 +15,7 @@ import (
 	wechatutil "github.com/micro-plat/wechat/util"
 )
 
-type Client struct {
+type Context struct {
 	appId  string
 	mchId  string
 	apiKey string
@@ -26,20 +26,20 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func (clt *Client) AppId() string {
+func (clt *Context) AppId() string {
 	return clt.appId
 }
-func (clt *Client) MchId() string {
+func (clt *Context) MchId() string {
 	return clt.mchId
 }
-func (clt *Client) ApiKey() string {
+func (clt *Context) ApiKey() string {
 	return clt.apiKey
 }
 
-func (clt *Client) SubAppId() string {
+func (clt *Context) SubAppId() string {
 	return clt.subAppId
 }
-func (clt *Client) SubMchId() string {
+func (clt *Context) SubMchId() string {
 	return clt.subMchId
 }
 
@@ -48,11 +48,11 @@ func (clt *Client) SubMchId() string {
 //  mchId:      必选; 商户号 mch_id
 //  apiKey:     必选; 商户的签名 key
 //  httpClient: 可选; 默认使用 util.DefaultHttpClient
-func NewClient(appId, mchId, apiKey string, httpClient *http.Client) *Client {
+func NewContext(appId, mchId, apiKey string, httpClient *http.Client) *Context {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultHttpClient
 	}
-	return &Client{
+	return &Context{
 		appId:      appId,
 		mchId:      mchId,
 		apiKey:     apiKey,
@@ -67,11 +67,11 @@ func NewClient(appId, mchId, apiKey string, httpClient *http.Client) *Client {
 //  subAppId:   可选; 公众号的 sub_appid
 //  subMchId:   必选; 商户号 sub_mch_id
 //  httpClient: 可选; 默认使用 util.DefaultHttpClient
-func NewSubMchClient(appId, mchId, apiKey string, subAppId, subMchId string, httpClient *http.Client) *Client {
+func NewSubMchClient(appId, mchId, apiKey string, subAppId, subMchId string, httpClient *http.Client) *Context {
 	if httpClient == nil {
 		httpClient = wechatutil.DefaultHttpClient
 	}
-	return &Client{
+	return &Context{
 		appId:      appId,
 		mchId:      mchId,
 		apiKey:     apiKey,
@@ -83,7 +83,7 @@ func NewSubMchClient(appId, mchId, apiKey string, subAppId, subMchId string, htt
 
 // PostXML 是微信支付通用请求方法.
 //  err == nil 表示 (return_code == "SUCCESS" && result_code == "SUCCESS").
-func (clt *Client) PostXML(url string, req map[string]string) (resp map[string]string, err error) {
+func (clt *Context) PostXML(url string, req map[string]string) (resp map[string]string, err error) {
 	switch url {
 	case "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", "https://api2.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", // 企业付款
 		"https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", "https://api2.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", // 发放普通红包
@@ -150,7 +150,7 @@ RETRY:
 	return resp, nil
 }
 
-func (clt *Client) postXML(url string, body []byte, reqSignType string) (resp map[string]string, needRetry bool, err error) {
+func (clt *Context) postXML(url string, body []byte, reqSignType string) (resp map[string]string, needRetry bool, err error) {
 	api.DebugPrintPostXMLRequest(url, body)
 	httpResp, err := clt.httpClient.Post(url, "text/xml; charset=utf-8", bytes.NewReader(body))
 	if err != nil {

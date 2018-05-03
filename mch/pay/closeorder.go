@@ -6,7 +6,7 @@ import (
 )
 
 // CloseOrder 关闭订单.
-func CloseOrder(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func CloseOrder(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/pay/closeorder", req)
 }
 
@@ -22,7 +22,7 @@ type CloseOrderRequest struct {
 }
 
 // CloseOrder2 关闭订单.
-func CloseOrder2(clt *mch.Client, req *CloseOrderRequest) (err error) {
+func CloseOrder2(clt *mch.Context, req *CloseOrderRequest) (err error) {
 	m1 := make(map[string]string, 8)
 	m1["out_trade_no"] = req.OutTradeNo
 	if req.NonceStr != "" {

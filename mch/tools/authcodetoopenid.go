@@ -6,7 +6,7 @@ import (
 )
 
 // AuthCodeToOpenId 授权码查询openid.
-func AuthCodeToOpenId(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func AuthCodeToOpenId(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/tools/authcodetoopenid", req)
 }
 
@@ -32,7 +32,7 @@ type AuthCodeToOpenIdResponse struct {
 }
 
 // AuthCodeToOpenId2 授权码查询openid.
-func AuthCodeToOpenId2(clt *mch.Client, req *AuthCodeToOpenIdRequest) (resp *AuthCodeToOpenIdResponse, err error) {
+func AuthCodeToOpenId2(clt *mch.Context, req *AuthCodeToOpenIdRequest) (resp *AuthCodeToOpenIdResponse, err error) {
 	m1 := make(map[string]string, 8)
 	m1["auth_code"] = req.AuthCode
 	if req.NonceStr != "" {

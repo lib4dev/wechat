@@ -9,7 +9,7 @@ import (
 )
 
 // Report 交易保障.
-func Report(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func Report(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/payitil/report", req)
 }
 
@@ -32,7 +32,7 @@ type ReportRequest struct {
 }
 
 // Report2 交易保障.
-func Report2(clt *mch.Client, req *ReportRequest) (err error) {
+func Report2(clt *mch.Context, req *ReportRequest) (err error) {
 	m1 := make(map[string]string, 24)
 	if req.DeviceInfo != "" {
 		m1["device_info"] = req.DeviceInfo

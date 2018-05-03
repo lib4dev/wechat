@@ -10,7 +10,7 @@ import (
 )
 
 // OrderQuery 查询订单.
-func OrderQuery(clt *mch.Client, req map[string]string) (resp map[string]string, err error) {
+func OrderQuery(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {
 	return clt.PostXML(mch.APIBaseURL()+"/pay/orderquery", req)
 }
 
@@ -55,7 +55,7 @@ type OrderQueryResponse struct {
 
 // OrderQuery2 查询订单.
 //  NOTE: 该函数不支持 代金券 功能, 如果有 代金券 功能请使用 OrderQuery 函数.
-func OrderQuery2(clt *mch.Client, req *OrderQueryRequest) (resp *OrderQueryResponse, err error) {
+func OrderQuery2(clt *mch.Context, req *OrderQueryRequest) (resp *OrderQueryResponse, err error) {
 	m1 := make(map[string]string, 8)
 	if req.TransactionId != "" {
 		m1["transaction_id"] = req.TransactionId
