@@ -55,11 +55,11 @@ func bind(r *hydra.MicroApp) {
 	r.Initializing(func(c component.IContainer) error {
 
 		//获取微信消息推送配置
-		var config AppWXConf
-		if err := c.GetAppConf(&config); err != nil {
+		var wxConf AppWXConf
+		if err := c.GetAppConf(&wxConf); err != nil {
 			return err
 		}
-		if b, err := govalidator.ValidateStruct(&config); !b || len(config.WX) == 0 {
+		if b, err := govalidator.ValidateStruct(&wxConf); !b || len(wxConf.WX) == 0 {
 			err = fmt.Errorf("app 配置文件有误:%v", err)
 			return err
 		}
@@ -70,7 +70,7 @@ func bind(r *hydra.MicroApp) {
 			return err
 		}
 
-		for i, wx := range config.WX {
+		for i, wx := range wxConf.WX {
 			//创建微信处理服务
 			ctx := &mp.WConf{
 				AppID:          wx.AppID,
@@ -96,7 +96,6 @@ func bind(r *hydra.MicroApp) {
 				SubAppId: pc.SubAppId,
 				SubMchId: pc.SubMchId,
 			}, orderNotify))
-
 		}
 		return nil
 	})

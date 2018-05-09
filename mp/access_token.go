@@ -19,7 +19,6 @@ import (
 type IAccessToken interface {
 	Token() (token string, err error)                           // 请求中控服务器返回缓存的 access_token
 	RefreshToken(currentToken string) (token string, err error) // 请求中控服务器刷新 access_token
-	IID01332E16DF5011E5A9D5A4DB30FED8E1()                       // 接口标识, 没有实际意义
 }
 
 var _ IAccessToken = (*DefaultAccessToken)(nil)

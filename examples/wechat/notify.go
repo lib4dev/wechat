@@ -6,5 +6,5 @@ import (
 )
 
 func orderNotify(conf *mch.PayConf, msg map[string]string, ctx *context.Context) {
-	ctx.Log.Info("-----recv.notify-----")
+
 }

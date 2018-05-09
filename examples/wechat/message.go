@@ -5,15 +5,13 @@ import (
 	"github.com/micro-plat/wechat/mp/message"
 
 	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/mp/core"
 )
 
 //处理微信消息
-func recvMessage(cnf *mp.WConf, msg *core.MixedMsg, ctx *context.Context) *core.Reply {
-	ctx.Log.Info("-----recv.message-----")
+func recvMessage(cnf *mp.WConf, msg *mp.MixedMsg, ctx *context.Context) *mp.Reply {
 	switch msg.EventType {
-	case core.EventSubscribe:
-		return &core.Reply{MsgType: core.MsgTypeText, MsgData: message.NewText("欢迎关注公众号")}
+	case mp.EventSubscribe:
+		return &mp.Reply{MsgType: mp.MsgTypeText, MsgData: message.NewText("欢迎关注公众号")}
 	}
 	return nil
 }
