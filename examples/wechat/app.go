@@ -37,8 +37,8 @@ type PayConfig struct {
 
 //bindConf 绑定启动配置， 启动时检查注册中心配置是否存在，不存在则引导用户输入配置参数并自动创建到注册中心
 func bindConf(app *hydra.MicroApp) {
-	app.Binder.API.SetMainConf(`{"address":":9999"}`)
-	app.Binder.API.SetSubConf("app", `{
+	app.Conf.API.SetMainConf(`{"address":":9999"}`)
+	app.Conf.API.SetSubConf("app", `{
 		"wx":[{
 			"appid": "wx9e02ddcc88e13fd4",
 			"secret": "6acb2bf99177524beba3d97d54df2de5",
