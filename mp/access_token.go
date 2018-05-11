@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"sync/atomic"
 	"time"
 	"unsafe"
@@ -46,6 +47,9 @@ func NewDefaultAccessToken(appId, appSecret string) (srv *DefaultAccessToken) {
 
 //NewDefaultAccessTokenByURL 创建一个新的DefaultAccessToken
 func NewDefaultAccessTokenByURL(appId, appSecret string, url string) (srv *DefaultAccessToken) {
+	if !strings.Contains(url, "?") {
+		url = url + "?"
+	}
 	return NewDefaultAccessTokenByClient(appId, appSecret, url, nil)
 }
 
@@ -67,8 +71,6 @@ func NewDefaultAccessTokenByClient(appId, appSecret string, u string, httpClient
 	go srv.tokenUpdateDaemon(time.Hour * 24 * time.Duration(100+rand.Int63n(200)))
 	return
 }
-
-func (srv *DefaultAccessToken) IID01332E16DF5011E5A9D5A4DB30FED8E1() {}
 
 func (srv *DefaultAccessToken) Token() (token string, err error) {
 	if p := (*accessToken)(atomic.LoadPointer(&srv.tokenCache)); p != nil {
