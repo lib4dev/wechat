@@ -101,7 +101,7 @@ func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 	var rawXMLMsgBytes []byte
 	if srv.isSafeMode {
 		var encryptedXMLMsg EncryptedXMLMsg
-		body, err := ctx.Request.Ext.GetBody()
+		body, err := ctx.Request.GetBody()
 		if err != nil {
 			return nil, err
 		}
@@ -130,7 +130,7 @@ func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 		}
 	} else {
 
-		body, err := ctx.Request.Ext.GetBody()
+		body, err := ctx.Request.GetBody()
 		if err != nil {
 			return nil, fmt.Errorf("从body中解析xml失败, err=%v", err)
 		}
