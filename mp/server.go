@@ -14,11 +14,15 @@ import (
 	"github.com/micro-plat/wechat/util"
 )
 
+type IMessageHandler interface {
+	Handle(*WConf, *MixedMsg, *context.Context) *Reply
+}
+
 //Server struct
 type Server struct {
 	*WConf
 	container      component.IContainer
-	messageHandler func(*WConf, *MixedMsg, *context.Context) *Reply
+	messageHandler IMessageHandler
 
 	requestRawXMLMsg []byte
 
@@ -28,11 +32,10 @@ type Server struct {
 	timestamp  int64
 }
 
-func NewMessageSeverHandler(c *WConf, handler func(*WConf, *MixedMsg, *context.Context) *Reply) func(container component.IContainer) *Server {
+func NewMessageSeverHandler(c *WConf, handler func(container component.IContainer) IMessageHandler) func(container component.IContainer) *Server {
 	return func(container component.IContainer) (u *Server) {
 		u = NewMessageServer(c)
-		u.container = container
-		u.messageHandler = handler
+		u.messageHandler = handler(container)
 		return u
 	}
 }
@@ -93,8 +96,7 @@ func (srv *Server) handleRequest(ctx *context.Context) (reply *Reply, mixMsg *Mi
 		err = errors.New("消息类型转换失败")
 		return
 	}
-	ctx.Meta.Set("container", srv.container)
-	reply = srv.messageHandler(srv.WConf, mixMessage, ctx)
+	reply = srv.messageHandler.Handle(srv.WConf, mixMessage, ctx)
 	return reply, mixMessage, nil
 }
 
