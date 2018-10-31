@@ -60,7 +60,7 @@ func NewSubMchServer(appId, mchId, apiKey string, subAppId, subMchId string, han
 
 // Handle 处理微信服务器的回调请求, query 参数可以为 nil.
 func (srv *NoitfyServer) Handle(ctx *context.Context) (r interface{}) {
-	switch ctx.Request.GetMethod() {
+	switch strings.ToUpper(ctx.Request.GetMethod()) {
 	case "POST":
 		body, err := ctx.Request.GetBody()
 		if err != nil {
@@ -134,16 +134,15 @@ func (srv *NoitfyServer) Handle(ctx *context.Context) (r interface{}) {
 				wantSignature = Sign2(msg, srv.ApiKey, hmac.New(sha256.New, []byte(srv.ApiKey)))
 			default:
 				err = fmt.Errorf("unsupported notification sign_type: %s", signType)
-				return
+				return err
 			}
 			if !util.SecureCompareString(haveSignature, wantSignature) {
 				err = fmt.Errorf("sign mismatch,\nhave: %s,\nwant: %s", haveSignature, wantSignature)
-				return
+				return err
 			}
 		} else {
 			if _, ok := msg["req_info"]; !ok { // 退款结果通知没有 sign 字段
-				err = ErrNotFoundSign
-				return
+				return ErrNotFoundSign
 			}
 		}
 		srv.handler.ServeMsg(&srv.PayConf, msg, ctx)
