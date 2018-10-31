@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/context"
 	"github.com/micro-plat/wechat/util"
 )
@@ -25,7 +26,7 @@ type NoitfyServer struct {
 	handler Handler
 }
 
-func NewNotifyServeHandler(conf PayConf, handler HandlerFunc) *NoitfyServer {
+func NewNotifyByConf(conf PayConf, handler HandlerFunc) *NoitfyServer {
 	if conf.ApiKey == "" {
 		panic("empty apiKey")
 	}
@@ -45,13 +46,16 @@ func NewNotifyServeHandler(conf PayConf, handler HandlerFunc) *NoitfyServer {
 //  apiKey:       必选; 商户的签名 key
 //  handler:      必选; 处理微信服务器推送过来的消息(事件)的 Handler
 //  errorHandler: 可选; 用于处理 Server 在处理消息(事件)过程中产生的错误, 如果没有设置则默认使用 DefaultErrorHandler
-func NewNoitfyServer(appId, mchId, apiKey string, handler HandlerFunc) *NoitfyServer {
-	return NewNotifyServeHandler(PayConf{AppId: appId, MchId: mchId, ApiKey: apiKey}, handler)
+
+func NewNoitfyServerHandler(appId, mchId, apiKey string, handler HandlerFunc) func(container component.IContainer) *NoitfyServer {
+	return func(container component.IContainer) (u *NoitfyServer) {
+		return NewNotifyByConf(PayConf{AppId: appId, MchId: mchId, ApiKey: apiKey}, handler)
+	}
 }
 
 // NewSubMchServer 创建一个新的 Server.
 func NewSubMchServer(appId, mchId, apiKey string, subAppId, subMchId string, handler HandlerFunc) *NoitfyServer {
-	return NewNotifyServeHandler(PayConf{AppId: appId, MchId: mchId, ApiKey: apiKey, SubAppId: subAppId, SubMchId: subMchId}, handler)
+	return NewNotifyByConf(PayConf{AppId: appId, MchId: mchId, ApiKey: apiKey, SubAppId: subAppId, SubMchId: subMchId}, handler)
 }
 
 // Handle 处理微信服务器的回调请求, query 参数可以为 nil.
