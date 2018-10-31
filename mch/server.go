@@ -55,10 +55,10 @@ func NewSubMchServer(appId, mchId, apiKey string, subAppId, subMchId string, han
 }
 
 // Handle 处理微信服务器的回调请求, query 参数可以为 nil.
-func (srv *NoitfyServer) Handle(name string, engine string, service string, ctx *context.Context) (r interface{}) {
-	switch ctx.Request.Ext.GetMethod() {
+func (srv *NoitfyServer) Handle(ctx *context.Context) (r interface{}) {
+	switch ctx.Request.GetMethod() {
 	case "POST":
-		body, err := ctx.Request.Ext.GetBody()
+		body, err := ctx.Request.GetBody()
 		if err != nil {
 			return err
 		}

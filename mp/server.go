@@ -44,7 +44,7 @@ func NewMessageSeverHandler(c *WConf, handler func(*WConf, *MixedMsg, *context.C
 }
 
 //Handle 处理微信的请求消息
-func (srv *Server) Handle(name string, engine string, service string, ctx *context.Context) (r interface{}) {
+func (srv *Server) Handle(ctx *context.Context) (r interface{}) {
 	if !srv.Validate(ctx) {
 		return fmt.Errorf("请求校验失败")
 	}
