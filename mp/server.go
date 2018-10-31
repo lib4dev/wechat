@@ -8,6 +8,7 @@ import (
 	"runtime/debug"
 	"strconv"
 
+	"github.com/micro-plat/hydra/component"
 	"github.com/micro-plat/hydra/context"
 
 	"github.com/micro-plat/wechat/util"
@@ -27,20 +28,19 @@ type Server struct {
 	timestamp  int64
 }
 
+func NewMessageSeverHandler(c *WConf, handler func(*WConf, *MixedMsg, *context.Context) *Reply) func(container component.IContainer) *Server {
+	return func(container component.IContainer) (u *Server) {
+		u = NewMessageServer(c)
+		u.messageHandler = handler
+		return u
+	}
+}
+
 //NewMessageServer init
 func NewMessageServer(c *WConf) *Server {
 	srv := new(Server)
 	srv.WConf = c
 	return srv
-}
-
-//NewMessageSeverHandler init
-func NewMessageSeverHandler(c *WConf, handler func(*WConf, *MixedMsg, *context.Context) *Reply) func() *Server {
-	return func() *Server {
-		s := NewMessageServer(c)
-		s.messageHandler = handler
-		return s
-	}
 }
 
 //Handle 处理微信的请求消息
