@@ -30,6 +30,7 @@ type RefundRequest struct {
 	RefundFeeType string `xml:"refund_fee_type"` // 货币类型，符合ISO 4217标准的三位字母代码，默认人民币：CNY，其他值列表详见货币类型
 	RefundDesc    string `xml:"refund_desc"`     // 若商户传入，会在下发给用户的退款消息中体现退款原因
 	RefundAccount string `xml:"refund_account"`  // 退款资金来源
+	NotifyURL     string `xml:"notify_url"`      // 退款结果通知url
 }
 
 type RefundResponse struct {
@@ -83,6 +84,9 @@ func Refund2(clt *mch.Context, req *RefundRequest) (resp *RefundResponse, err er
 	}
 	if req.RefundAccount != "" {
 		m1["refund_account"] = req.RefundAccount
+	}
+	if req.NotifyURL != "" {
+		m1["notify_url"] = req.NotifyURL
 	}
 
 	m2, err := Refund(clt, m1)
