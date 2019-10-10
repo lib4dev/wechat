@@ -10,6 +10,14 @@ import (
 	"github.com/micro-plat/wechat/util"
 )
 
+type Token struct {
+	AccessToken  string `json:"access_token"`
+	ExpiresIn    int    `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
+	OpenID       string `json:"openid"`
+	Scope        string `json:"scope"`
+}
+
 // AuthCodeURL 生成网页授权地址.
 //  appId:       公众号的唯一标识
 //  redirectURI: 授权后重定向的回调链接地址
@@ -63,8 +71,6 @@ func Auth(accessToken, openId string, httpClient *http.Client) (valid bool, err 
 		return
 	}
 }
-
-
 
 // AuthCode 用code换取网页token.
 //  accessToken: 网页授权接口调用凭证
