@@ -85,3 +85,50 @@ func GetUserInfo(accessToken, openId, lang string, httpClient *http.Client) (inf
 	info = &result.UserInfo
 	return
 }
+
+// GetUserInfoDefault 获取用户信息,这个接口,需要该用户（即openid）关注了公众号后，才能调用成功的。
+//  accessToken: 网页授权接口调用凭证
+//  openId:      用户的唯一标识
+//  lang:        返回国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语, 如果留空 "" 则默认为 zh_CN
+//  httpClient:  如果不指定则默认为 util.DefaultHttpClient
+func GetUserInfoDefault(accessToken, openID, lang string, httpClient *http.Client) (info *UserInfo, err error) {
+	switch lang {
+	case "":
+		lang = LanguageZhCN
+	case LanguageZhCN, LanguageZhTW, LanguageEN:
+	default:
+		lang = LanguageZhCN
+	}
+
+	if httpClient == nil {
+		httpClient = util.DefaultHttpClient
+	}
+	_url := "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + url.QueryEscape(accessToken) +
+		"&openid=" + url.QueryEscape(openID) +
+		"&lang=" + lang
+	api.DebugPrintGetRequest(_url)
+	httpResp, err := httpClient.Get(_url)
+	if err != nil {
+		return
+	}
+	defer httpResp.Body.Close()
+
+	if httpResp.StatusCode != http.StatusOK {
+		err = fmt.Errorf("http.Status: %s", httpResp.Status)
+		return
+	}
+
+	var result struct {
+		oauth2.Error
+		UserInfo
+	}
+	if err = api.DecodeJSONHttpResponse(httpResp.Body, &result); err != nil {
+		return
+	}
+	if result.ErrCode != oauth2.ErrCodeOK {
+		err = &result.Error
+		return
+	}
+	info = &result.UserInfo
+	return
+}
