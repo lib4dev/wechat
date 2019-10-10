@@ -63,3 +63,46 @@ func Auth(accessToken, openId string, httpClient *http.Client) (valid bool, err 
 		return
 	}
 }
+
+
+
+// AuthCode 用code换取网页token.
+//  accessToken: 网页授权接口调用凭证
+//  openId:      用户的唯一标识
+//  httpClient:  如果不指定则默认为 util.DefaultHttpClient
+func AuthCode(appID, appSecret, code string, httpClient *http.Client) (info *Token, err error) {
+	if httpClient == nil {
+		httpClient = util.DefaultHttpClient
+	}
+
+	_url := "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + url.QueryEscape(appID) +
+		"&secret=" + url.QueryEscape(appSecret) +
+		"&code=" + url.QueryEscape(code) +
+		"&grant_type=authorization_code"
+	api.DebugPrintGetRequest(_url)
+	httpResp, err := httpClient.Get(_url)
+	if err != nil {
+		return
+	}
+	defer httpResp.Body.Close()
+
+	if httpResp.StatusCode != http.StatusOK {
+		err = fmt.Errorf("http.Status: %s", httpResp.Status)
+		return
+	}
+
+	var result struct {
+		oauth2.Error
+		Token
+	}
+	if err = api.DecodeJSONHttpResponse(httpResp.Body, &result); err != nil {
+		return
+	}
+	if result.ErrCode != oauth2.ErrCodeOK {
+		err = &result.Error
+		return
+	}
+	info = &result.Token
+	return
+}
+
