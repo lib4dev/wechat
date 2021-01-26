@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // UploadImage 上传图片到微信服务器, 返回的图片url给其他场景使用, 比如图文消息, 卡卷, POI.

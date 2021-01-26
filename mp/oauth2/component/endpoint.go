@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/micro-plat/wechat/oauth2"
+	"github.com/lib4dev/wechat/oauth2"
 )
 
 var _ oauth2.Endpoint = (*Endpoint)(nil)

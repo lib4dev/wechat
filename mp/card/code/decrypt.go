@@ -1,6 +1,6 @@
 package code
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // Code解码接口
 func Decrypt(clt *mp.Context, encryptCode string) (code string, err error) {

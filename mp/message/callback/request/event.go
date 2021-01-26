@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -51,7 +51,7 @@ type UnsubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"              json:"Event"`              // unsubscribe
-	EventKey  string         `xml:"EventKey,omitempty" json:"EventKey,omitempty"` // 事件KEY值, 空值
+	EventKey  string       `xml:"EventKey,omitempty" json:"EventKey,omitempty"` // 事件KEY值, 空值
 }
 
 func GetUnsubscribeEvent(msg *mp.MixedMsg) *UnsubscribeEvent {
@@ -67,8 +67,8 @@ type ScanEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // SCAN
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 二维码的参数值(scene_id, scene_str)
-	Ticket    string         `xml:"Ticket"   json:"Ticket"`   // 二维码的ticket, 可用来换取二维码图片
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 二维码的参数值(scene_id, scene_str)
+	Ticket    string       `xml:"Ticket"   json:"Ticket"`   // 二维码的ticket, 可用来换取二维码图片
 }
 
 func GetScanEvent(msg *mp.MixedMsg) *ScanEvent {
@@ -85,9 +85,9 @@ type LocationEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"     json:"Event"`     // LOCATION
-	Latitude  float64        `xml:"Latitude"  json:"Latitude"`  // 地理位置纬度
-	Longitude float64        `xml:"Longitude" json:"Longitude"` // 地理位置经度
-	Precision float64        `xml:"Precision" json:"Precision"` // 地理位置精度(整数? 但是微信推送过来是浮点数形式)
+	Latitude  float64      `xml:"Latitude"  json:"Latitude"`  // 地理位置纬度
+	Longitude float64      `xml:"Longitude" json:"Longitude"` // 地理位置经度
+	Precision float64      `xml:"Precision" json:"Precision"` // 地理位置精度(整数? 但是微信推送过来是浮点数形式)
 }
 
 func GetLocationEvent(msg *mp.MixedMsg) *LocationEvent {

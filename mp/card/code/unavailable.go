@@ -1,6 +1,6 @@
 package code
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 设置卡券失效接口.
 func Unavailable(clt *mp.Context, id *CardItemIdentifier) (err error) {

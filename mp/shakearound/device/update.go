@@ -1,8 +1,8 @@
 package device
 
 import (
-	"github.com/micro-plat/wechat/internal/util"
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/internal/util"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 设备标识

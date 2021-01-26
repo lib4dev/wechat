@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // UploadHeadImage 上传客服头像.

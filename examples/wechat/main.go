@@ -1,15 +1,17 @@
 package main
 
 import (
-	"github.com/micro-plat/hydra/hydra"
+	"github.com/micro-plat/hydra"
+	"github.com/micro-plat/hydra/hydra/servers/http"
 )
 
+var App = hydra.NewApp(
+	hydra.WithPlatName("wechat"),
+	hydra.WithSystemName("notifier"),
+	hydra.WithServerTypes(http.API),
+	hydra.WithClusterName("prod"))
+
 func main() {
-	app := hydra.NewApp(
-		hydra.WithPlatName("wechat"),
-		hydra.WithSystemName("notifier"),
-		hydra.WithServerTypes("api"),
-		hydra.WithDebug())
-	bind(app)
-	app.Start()
+	bind(App)
+	App.Start()
 }

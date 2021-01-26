@@ -3,7 +3,7 @@ package material
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 删除永久素材.

@@ -1,6 +1,6 @@
 package code
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 查询code.
 func Get(clt *mp.Context, id *CardItemIdentifier) (info *CardItem, err error) {

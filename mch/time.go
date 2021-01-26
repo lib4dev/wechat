@@ -3,7 +3,7 @@ package mch
 import (
 	"time"
 
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/util"
 )
 
 // FormatTime 将参数 t 格式化成北京时间 yyyyMMddHHmmss.

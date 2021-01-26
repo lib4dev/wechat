@@ -1,6 +1,6 @@
 package statistics
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type Statistics struct {
 	ShopId     int64 `json:"shop_id"`     // 门店ID，-1为总统计

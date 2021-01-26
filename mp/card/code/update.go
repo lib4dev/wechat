@@ -1,6 +1,6 @@
 package code
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 更改Code接口.
 func Update(clt *mp.Context, id *CardItemIdentifier, newCode string) (err error) {

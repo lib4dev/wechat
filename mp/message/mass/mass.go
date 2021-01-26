@@ -1,7 +1,7 @@
 package mass
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 群发结果

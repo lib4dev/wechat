@@ -1,6 +1,6 @@
 package membercard
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type ActivateParameters struct {
 	Code   string `json:"code"`              // 必填, 创建会员卡时获取的初始code。

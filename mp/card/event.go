@@ -1,6 +1,6 @@
 package card
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 const (
 	// 推送到公众号URL上的事件类型

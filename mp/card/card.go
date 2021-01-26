@@ -1,6 +1,6 @@
 package card
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 创建卡券.
 func Create(clt *mp.Context, card *Card) (cardId string, err error) {

@@ -5,7 +5,7 @@ package api
 import (
 	"io"
 
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/util"
 )
 
 func DebugPrintGetRequest(url string) {}

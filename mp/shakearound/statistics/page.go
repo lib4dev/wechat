@@ -1,7 +1,7 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 以页面为维度的数据统计接口

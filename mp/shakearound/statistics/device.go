@@ -1,8 +1,8 @@
 package statistics
 
 import (
-	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/mp/shakearound/device"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/lib4dev/wechat/mp/shakearound/device"
 )
 
 // 以设备为维度的数据统计接口

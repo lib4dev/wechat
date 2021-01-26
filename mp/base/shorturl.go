@@ -1,6 +1,6 @@
 package base
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // ShortURL 将一条长链接转成短链接.
 func ShortURL(clt *mp.Context, longURL string) (shortURL string, err error) {

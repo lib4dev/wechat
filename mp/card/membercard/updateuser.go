@@ -1,6 +1,6 @@
 package membercard
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type UpdateUserParameters struct {
 	Code   string `json:"code"`              // 必须; 要消耗的序列号.

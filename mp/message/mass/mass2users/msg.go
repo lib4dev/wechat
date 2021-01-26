@@ -1,7 +1,7 @@
 package mass2users
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 )
 
 type MsgHeader struct {
-	ToUser  []string     `json:"touser,omitempty"`
+	ToUser  []string   `json:"touser,omitempty"`
 	MsgType mp.MsgType `json:"msgtype"`
 }
 

@@ -1,7 +1,7 @@
 package preview
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -14,8 +14,8 @@ const (
 )
 
 type MsgHeader struct {
-	ToWxName string       `json:"towxname,omitempty"`
-	ToUser   string       `json:"touser,omitempty"`
+	ToWxName string     `json:"towxname,omitempty"`
+	ToUser   string     `json:"touser,omitempty"`
 	MsgType  mp.MsgType `json:"msgtype"`
 }
 

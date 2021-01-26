@@ -3,7 +3,7 @@ package message
 import (
 	"encoding/xml"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 //Image 图片消息
@@ -24,10 +24,10 @@ func NewImage(mediaID string) *Image {
 
 // CommonToken 消息中通用的结构
 type CommonToken struct {
-	XMLName      xml.Name     `xml:"xml"`
-	ToUserName   string       `xml:"ToUserName"`
-	FromUserName string       `xml:"FromUserName"`
-	CreateTime   int64        `xml:"CreateTime"`
+	XMLName      xml.Name   `xml:"xml"`
+	ToUserName   string     `xml:"ToUserName"`
+	FromUserName string     `xml:"FromUserName"`
+	CreateTime   int64      `xml:"CreateTime"`
 	MsgType      mp.MsgType `xml:"MsgType"`
 }
 

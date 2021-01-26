@@ -2,8 +2,8 @@
 package mass2all
 
 import (
-	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/mp/message/mass"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/lib4dev/wechat/mp/message/mass"
 )
 
 // Send 发送消息, msg 是经过 encoding/json.Marshal 得到的结果符合微信消息格式的任何数据结构.

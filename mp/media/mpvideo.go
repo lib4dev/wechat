@@ -1,7 +1,7 @@
 package media
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // UploadVideo2 创建视频素材, 返回的素材一般用于群发消息.

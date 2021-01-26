@@ -1,7 +1,7 @@
 package mass2all
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (

@@ -3,12 +3,12 @@ package oauth2
 import (
 	"net/url"
 
-	"github.com/micro-plat/wechat/oauth2"
+	"github.com/lib4dev/wechat/oauth2"
 )
 
 var _ oauth2.Endpoint = (*Endpoint)(nil)
 
-// Endpoint 实现了 github.com/micro-plat/wechat/oauth2.Endpoint 接口.
+// Endpoint 实现了 github.com/lib4dev/wechat/oauth2.Endpoint 接口.
 type Endpoint struct {
 	AppId     string
 	AppSecret string

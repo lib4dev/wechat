@@ -1,6 +1,6 @@
 package mmpaymkttransfers
 
-import "github.com/micro-plat/wechat/mch"
+import "github.com/lib4dev/wechat/mch"
 
 // 查询企业付款.
 //  NOTE: 请求需要双向证书

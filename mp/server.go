@@ -8,20 +8,18 @@ import (
 	"runtime/debug"
 	"strconv"
 
-	"github.com/micro-plat/hydra/component"
-	"github.com/micro-plat/hydra/context"
-
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/util"
+	"github.com/micro-plat/hydra"
 )
 
 type IMessageHandler interface {
-	Handle(*WConf, *MixedMsg, *context.Context) *Reply
+	Handle(*WConf, *MixedMsg, hydra.IContext) *Reply
 }
 
 //Server struct
 type Server struct {
 	*WConf
-	container      component.IContainer
+	ctx            hydra.IContext
 	messageHandler IMessageHandler
 
 	requestRawXMLMsg []byte
@@ -32,10 +30,10 @@ type Server struct {
 	timestamp  int64
 }
 
-func NewMessageSeverHandler(c *WConf, handler func(container component.IContainer) IMessageHandler) func(container component.IContainer) *Server {
-	return func(container component.IContainer) (u *Server) {
+func NewMessageSeverHandler(c *WConf, handler func(ctx hydra.IContext) IMessageHandler) func(ctx hydra.IContext) *Server {
+	return func(ctx hydra.IContext) (u *Server) {
 		u = NewMessageServer(c)
-		u.messageHandler = handler(container)
+		u.messageHandler = handler(ctx)
 		return u
 	}
 }
@@ -48,13 +46,13 @@ func NewMessageServer(c *WConf) *Server {
 }
 
 //Handle 处理微信的请求消息
-func (srv *Server) Handle(ctx *context.Context) (r interface{}) {
+func (srv *Server) Handle(ctx hydra.IContext) (r interface{}) {
 	if !srv.Validate(ctx) {
 		return fmt.Errorf("请求校验失败")
 	}
-	echostr, exists := ctx.Request.QueryString.Get("echostr")
+	exists := ctx.Request().Has("echostr")
 	if exists {
-		ctx.Response.ShouldContent(echostr)
+		ctx.Response().WriteAny(ctx.Request().GetString("echostr"))
 		return nil
 	}
 	response, msg, err := srv.handleRequest(ctx)
@@ -70,18 +68,18 @@ func (srv *Server) Handle(ctx *context.Context) (r interface{}) {
 }
 
 //Validate 校验请求是否合法
-func (srv *Server) Validate(ctx *context.Context) bool {
-	timestamp := ctx.Request.GetString("timestamp")
-	nonce := ctx.Request.GetString("nonce")
-	signature := ctx.Request.GetString("signature")
+func (srv *Server) Validate(ctx hydra.IContext) bool {
+	timestamp := ctx.Request().GetString("timestamp")
+	nonce := ctx.Request().GetString("nonce")
+	signature := ctx.Request().GetString("signature")
 	return signature == util.Signature(srv.Token, timestamp, nonce)
 }
 
 //HandleRequest 处理微信的请求
-func (srv *Server) handleRequest(ctx *context.Context) (reply *Reply, mixMsg *MixedMsg, err error) {
+func (srv *Server) handleRequest(ctx hydra.IContext) (reply *Reply, mixMsg *MixedMsg, err error) {
 	//set isSafeMode
 	srv.isSafeMode = false
-	encryptType := ctx.Request.GetString("encrypt_type")
+	encryptType := ctx.Request().GetString("encrypt_type")
 	if encryptType == "aes" {
 		srv.isSafeMode = true
 	}
@@ -101,11 +99,11 @@ func (srv *Server) handleRequest(ctx *context.Context) (reply *Reply, mixMsg *Mi
 }
 
 //getMessage 解析微信返回的消息
-func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
+func (srv *Server) getMessage(ctx hydra.IContext) (interface{}, error) {
 	var rawXMLMsgBytes []byte
 	if srv.isSafeMode {
 		var encryptedXMLMsg EncryptedXMLMsg
-		body, err := ctx.Request.GetBody()
+		body, err := ctx.Request().GetBody()
 		if err != nil {
 			return nil, err
 		}
@@ -114,14 +112,14 @@ func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 		}
 
 		//验证消息签名
-		timestamp := ctx.Request.GetString("timestamp")
+		timestamp := ctx.Request().GetString("timestamp")
 		srv.timestamp, err = strconv.ParseInt(timestamp, 10, 32)
 		if err != nil {
 			return nil, err
 		}
-		nonce := ctx.Request.GetString("nonce")
+		nonce := ctx.Request().GetString("nonce")
 		srv.nonce = nonce
-		msgSignature := ctx.Request.GetString("msg_signature")
+		msgSignature := ctx.Request().GetString("msg_signature")
 		msgSignatureGen := util.Signature(srv.Token, timestamp, nonce, encryptedXMLMsg.EncryptedMsg)
 		if msgSignature != msgSignatureGen {
 			return nil, fmt.Errorf("消息不合法，验证签名失败")
@@ -134,7 +132,7 @@ func (srv *Server) getMessage(ctx *context.Context) (interface{}, error) {
 		}
 	} else {
 
-		body, err := ctx.Request.GetBody()
+		body, err := ctx.Request().GetBody()
 		if err != nil {
 			return nil, fmt.Errorf("从body中解析xml失败, err=%v", err)
 		}
@@ -204,11 +202,11 @@ func (srv *Server) buildResponse(requestMsg *MixedMsg, reply *Reply) (msgData in
 }
 
 //Send 将自定义的消息发送
-func (srv *Server) send(responseMsg interface{}, ctx *context.Context) (err error) {
+func (srv *Server) send(responseMsg interface{}, ctx hydra.IContext) (err error) {
 	replyMsg := responseMsg
 	if replyMsg == nil || reflect.ValueOf(replyMsg).IsNil() {
-		ctx.Response.Text("success")
-		//ctx.Response.ShouldContent("success")
+		ctx.Response().WriteAny("success")
+		//ctx.Response().ShouldContent("success")
 		return nil
 	}
 	if srv.isSafeMode {
@@ -234,7 +232,7 @@ func (srv *Server) send(responseMsg interface{}, ctx *context.Context) (err erro
 		}
 	}
 	if replyMsg != nil {
-		ctx.Response.XML(replyMsg)
+		ctx.Response().XML(200, replyMsg, "xml")
 	}
 	return
 }

@@ -1,6 +1,6 @@
 package device
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 删除设备
 func Delete(clt *mp.Context, bssid string) (err error) {

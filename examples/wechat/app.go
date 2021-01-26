@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/asaskevich/govalidator"
-	"github.com/micro-plat/hydra/component"
-	"github.com/micro-plat/hydra/hydra"
-	"github.com/micro-plat/wechat/mch"
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mch"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/micro-plat/hydra"
+	"github.com/micro-plat/hydra/conf/app"
 )
 
 //AppWXConf 应用程序配置
@@ -36,9 +36,8 @@ type PayConfig struct {
 }
 
 //bindConf 绑定启动配置， 启动时检查注册中心配置是否存在，不存在则引导用户输入配置参数并自动创建到注册中心
-func bindConf(app *hydra.MicroApp) {
-	app.Conf.API.SetMainConf(`{"address":":9999"}`)
-	app.Conf.API.SetSubConf("app", `{
+func bindConf() {
+	hydra.Conf.API("9999").Sub("app", `{
 		"wx":[{
 			"appid": "wx9e02ddcc88e13fd4",
 			"secret": "6acb2bf99177524beba3d97d54df2de5",
@@ -50,23 +49,23 @@ func bindConf(app *hydra.MicroApp) {
 }
 
 //bind 检查并缓存配置文件，初始化微信服务器用于接收微信通知
-func bind(r *hydra.MicroApp) {
-	bindConf(r)
-	r.Initializing(func(c component.IContainer) error {
+func bind(App *hydra.MicroApp) {
+	bindConf()
 
-		//获取微信消息推送配置
+	App.OnStarting(func(appConf app.IAPPConf) error {
+
 		var wxConf AppWXConf
-		if err := c.GetAppConf(&wxConf); err != nil {
-			return err
+		if _, err := appConf.GetServerConf().GetSubObject("app", &wxConf); err != nil {
+			return fmt.Errorf("获取vueconf配置失败:%v", err)
 		}
+
 		if b, err := govalidator.ValidateStruct(&wxConf); !b || len(wxConf.WX) == 0 {
 			err = fmt.Errorf("app 配置文件有误:%v", err)
 			return err
 		}
 
-		//获取微信支付通知配置
 		var payConf AppPayConf
-		if err := c.GetAppConf(&payConf); err != nil {
+		if _, err := appConf.GetServerConf().GetSubObject("app", &payConf); err != nil {
 			return err
 		}
 
@@ -78,7 +77,7 @@ func bind(r *hydra.MicroApp) {
 				Token:          wx.Token,
 				EncodingAESKey: wx.EncodingAESKey,
 			}
-			r.Micro(wx.ServeURL, mp.NewMessageSeverHandler(ctx, recvMessage))
+			App.Micro(wx.ServeURL, mp.NewMessageSeverHandler(ctx, recvMessage))
 			if !wx.EnablePayNotify {
 				continue
 			}
@@ -89,7 +88,7 @@ func bind(r *hydra.MicroApp) {
 				return err
 			}
 			pc := payConf.WX[i]
-			r.Micro(pc.PayNotifyURL, mch.NewNotifyServeHandler(mch.PayConf{
+			App.Micro(pc.PayNotifyURL, mch.NewNotifyServeHandler(mch.PayConf{
 				AppId:    wx.AppID,
 				ApiKey:   pc.PayKey,
 				MchId:    pc.PayMchID,
@@ -97,6 +96,7 @@ func bind(r *hydra.MicroApp) {
 				SubMchId: pc.SubMchId,
 			}, orderNotify))
 		}
+
 		return nil
 	})
 }

@@ -1,6 +1,6 @@
 package qrcode
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 获取物料二维码
 //  shopId: 门店ID

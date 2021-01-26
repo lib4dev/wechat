@@ -1,6 +1,6 @@
 package promotion
 
-import "github.com/micro-plat/wechat/mch"
+import "github.com/lib4dev/wechat/mch"
 
 // 查询代金券信息.
 func QueryCoupon(clt *mch.Context, req map[string]string) (resp map[string]string, err error) {

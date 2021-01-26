@@ -1,6 +1,6 @@
 package testwhitelist
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type SetParameters struct {
 	OpenIdList   []string `json:"openid,omitempty"`   // 测试的openid列表

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	mpoauth2 "github.com/micro-plat/wechat/mp/oauth2"
+	mpoauth2 "github.com/lib4dev/wechat/mp/oauth2"
 )
 
 // AuthCodeURL 生成网页授权地址.

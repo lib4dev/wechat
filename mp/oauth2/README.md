@@ -1,6 +1,6 @@
 ## 微信网页授权
 
-```Go
+``` Go
 package main
 
 import (
@@ -14,8 +14,8 @@ import (
 	"github.com/chanxuehong/rand"
 	"github.com/chanxuehong/session"
 	"github.com/chanxuehong/sid"
-	mpoauth2 "github.com/micro-plat/wechat/mp/oauth2"
-	"github.com/micro-plat/wechat/oauth2"
+	mpoauth2 "github.com/lib4dev/wechat/mp/oauth2"
+	"github.com/lib4dev/wechat/oauth2"
 )
 
 const (
@@ -133,7 +133,8 @@ func main() {
 ```
 
 #### 上面的程序基本上会打印下面的内容
-```
+
+``` 
 2016/03/11 14:44:10 AuthCodeURL: https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=http%3A%2F%2F192.168.1.129%3A8080%2Fpage2&response_type=code&scope=snsapi_userinfo&state=12fa275bac6998ba8f89a5baf13f93a0#wechat_redirect
 2016/03/11 14:44:12 /page2?code=001e44d3e2972606638027b31e61a8dH&state=12fa275bac6998ba8f89a5baf13f93a0
 2016/03/11 14:44:12 [WECHAT_DEBUG] [API] GET https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=APPSECRET&code=001e44d3e2972606638027b31e61a8dH&grant_type=authorization_code

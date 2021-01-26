@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/micro-plat/hydra/context"
-	"github.com/micro-plat/wechat/mch"
+	"github.com/lib4dev/wechat/mch"
+	"github.com/micro-plat/hydra"
 )
 
-func orderNotify(conf *mch.PayConf, msg map[string]string, ctx *context.Context) {
+func orderNotify(conf *mch.PayConf, msg map[string]string, ctx hydra.IContext) {
 
 }

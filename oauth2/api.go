@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/micro-plat/wechat/internal/debug/api"
+	"github.com/lib4dev/wechat/internal/debug/api"
 )
 
 // ExchangeToken 通过 code 换取网页授权 access_token.

@@ -1,7 +1,7 @@
 package template
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 设置所属行业.

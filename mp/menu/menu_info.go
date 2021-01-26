@@ -1,7 +1,7 @@
 package menu
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 获取自定义菜单配置接口.

@@ -1,7 +1,7 @@
 package card
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 卡券概况数据

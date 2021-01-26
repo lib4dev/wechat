@@ -1,6 +1,6 @@
 package device
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type AddParameters struct {
 	ShopId   int64  `json:"shop_id"`  // 必须, 门店ID

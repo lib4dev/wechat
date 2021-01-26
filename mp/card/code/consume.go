@@ -1,6 +1,6 @@
 package code
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 核销Code接口.
 func Consume(clt *mp.Context, id *CardItemIdentifier) (cardId, openId string, err error) {

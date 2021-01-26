@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/util"
 
-	"github.com/micro-plat/wechat/internal/debug/mch/api"
-	wechatutil "github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/internal/debug/mch/api"
+	wechatutil "github.com/lib4dev/wechat/util"
 )
 
 type Context struct {

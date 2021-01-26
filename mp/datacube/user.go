@@ -3,7 +3,7 @@ package datacube
 import (
 	"errors"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 用户增减数据

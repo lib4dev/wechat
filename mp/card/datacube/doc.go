@@ -1,2 +1,2 @@
-// see github.com/micro-plat/wechat/mp/datacube
+// see github.com/lib4dev/wechat/mp/datacube
 package datacube

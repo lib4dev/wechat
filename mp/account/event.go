@@ -1,6 +1,6 @@
 package account
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 const (
 	EventTypeQualificationVerifySuccess mp.EventType = "qualification_verify_success" // 资质认证成功（此时立即获得接口权限）

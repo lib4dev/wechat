@@ -1,6 +1,6 @@
 package card
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type Color struct {
 	Name  string `json:"name"`

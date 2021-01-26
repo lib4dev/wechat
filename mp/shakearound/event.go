@@ -3,7 +3,7 @@ package shakearound
 import (
 	"unsafe"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -21,7 +21,7 @@ type UserShakeEvent struct {
 	AroundBeacons []AroundBeacon `xml:"AroundBeacons>AroundBeacon,omitempty" json:"AroundBeacons,omitempty"`
 }
 
-// 和 github.com/micro-plat/wechat/mp/mp.MixedMsg.ChosenBeacon 一样, 同步修改
+// 和 github.com/lib4dev/wechat/mp/mp.MixedMsg.ChosenBeacon 一样, 同步修改
 type ChosenBeacon struct {
 	UUID     string  `xml:"Uuid"     json:"Uuid"`
 	Major    int     `xml:"Major"    json:"Major"`
@@ -29,7 +29,7 @@ type ChosenBeacon struct {
 	Distance float64 `xml:"Distance" json:"Distance"`
 }
 
-// 和 github.com/micro-plat/wechat/mp/mp.MixedMsg.AroundBeacon 一样, 同步修改
+// 和 github.com/lib4dev/wechat/mp/mp.MixedMsg.AroundBeacon 一样, 同步修改
 type AroundBeacon struct {
 	UUID     string  `xml:"Uuid"     json:"Uuid"`
 	Major    int     `xml:"Major"    json:"Major"`

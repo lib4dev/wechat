@@ -10,8 +10,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/micro-plat/wechat/internal/debug/api"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/internal/debug/api"
+	"github.com/lib4dev/wechat/util"
 )
 
 type refreshTokenResult struct {

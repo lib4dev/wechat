@@ -3,7 +3,7 @@ package menu
 import (
 	"testing"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 func TestCreate(t *testing.T) {

@@ -1,6 +1,6 @@
 package mpnews
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 // 获取卡券嵌入图文消息的标准格式代码.
 //  将返回代码填入上传图文素材接口中content字段，即可获取嵌入卡券的图文消息素材。

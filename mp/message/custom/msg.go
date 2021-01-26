@@ -1,7 +1,7 @@
 package custom
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -17,7 +17,7 @@ const (
 )
 
 type MsgHeader struct {
-	ToUser  string       `json:"touser"` // 接收方 OpenID
+	ToUser  string     `json:"touser"` // 接收方 OpenID
 	MsgType mp.MsgType `json:"msgtype"`
 }
 

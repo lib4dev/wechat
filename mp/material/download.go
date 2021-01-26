@@ -10,10 +10,10 @@ import (
 	"os"
 	"unicode"
 
-	"github.com/micro-plat/wechat/internal/debug/api"
-	"github.com/micro-plat/wechat/internal/debug/api/retry"
-	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/internal/debug/api"
+	"github.com/lib4dev/wechat/internal/debug/api/retry"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/lib4dev/wechat/util"
 )
 
 // Download 下载多媒体到文件.

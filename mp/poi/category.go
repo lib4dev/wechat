@@ -1,7 +1,7 @@
 package poi
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // CategoryList 获取门店类目表.

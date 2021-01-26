@@ -1,8 +1,8 @@
 package pay
 
 import (
-	"github.com/micro-plat/wechat/mch"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/mch"
+	"github.com/lib4dev/wechat/util"
 )
 
 // CloseOrder 关闭订单.

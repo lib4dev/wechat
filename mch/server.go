@@ -7,9 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/micro-plat/hydra/component"
-	"github.com/micro-plat/hydra/context"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/util"
+	"github.com/micro-plat/hydra"
 )
 
 type PayConf struct {
@@ -47,8 +46,8 @@ func NewNotifyByConf(conf PayConf, handler HandlerFunc) *NoitfyServer {
 //  handler:      必选; 处理微信服务器推送过来的消息(事件)的 Handler
 //  errorHandler: 可选; 用于处理 Server 在处理消息(事件)过程中产生的错误, 如果没有设置则默认使用 DefaultErrorHandler
 
-func NewNoitfyServerHandler(appId, mchId, apiKey string, handler HandlerFunc) func(container component.IContainer) *NoitfyServer {
-	return func(container component.IContainer) (u *NoitfyServer) {
+func NewNoitfyServerHandler(appId, mchId, apiKey string, handler HandlerFunc) func(ctx hydra.IContext) *NoitfyServer {
+	return func(ctx hydra.IContext) (u *NoitfyServer) {
 		return NewNotifyByConf(PayConf{AppId: appId, MchId: mchId, ApiKey: apiKey}, handler)
 	}
 }
@@ -59,14 +58,14 @@ func NewSubMchServer(appId, mchId, apiKey string, subAppId, subMchId string, han
 }
 
 // Handle 处理微信服务器的回调请求, query 参数可以为 nil.
-func (srv *NoitfyServer) Handle(ctx *context.Context) (r interface{}) {
-	switch strings.ToUpper(ctx.Request.GetMethod()) {
+func (srv *NoitfyServer) Handle(ctx hydra.IContext) (r interface{}) {
+	switch strings.ToUpper(ctx.Request().Path().GetMethod()) {
 	case "POST":
-		body, err := ctx.Request.GetBody()
+		body, err := ctx.Request().GetBody()
 		if err != nil {
 			return err
 		}
-		msg, err := util.DecodeXMLToMap(strings.NewReader(body))
+		msg, err := util.DecodeXMLToMap(strings.NewReader(string(body)))
 		if err != nil {
 			return err
 		}

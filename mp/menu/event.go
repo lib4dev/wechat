@@ -1,7 +1,7 @@
 package menu
 
 import (
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (
@@ -23,7 +23,7 @@ type ClickEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, CLICK
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 与自定义菜单接口中KEY值对应
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 与自定义菜单接口中KEY值对应
 }
 
 func GetClickEvent(msg *mp.MixedMsg) *ClickEvent {
@@ -39,8 +39,8 @@ type ViewEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"            json:"Event"`            // 事件类型, VIEW
-	EventKey  string         `xml:"EventKey"         json:"EventKey"`         // 事件KEY值, 设置的跳转URL
-	MenuId    int64          `xml:"MenuId,omitempty" json:"MenuId,omitempty"` // 菜单ID，如果是个性化菜单，则可以通过这个字段，知道是哪个规则的菜单被点击了。
+	EventKey  string       `xml:"EventKey"         json:"EventKey"`         // 事件KEY值, 设置的跳转URL
+	MenuId    int64        `xml:"MenuId,omitempty" json:"MenuId,omitempty"` // 菜单ID，如果是个性化菜单，则可以通过这个字段，知道是哪个规则的菜单被点击了。
 }
 
 func GetViewEvent(msg *mp.MixedMsg) *ViewEvent {
@@ -57,7 +57,7 @@ type ScanCodePushEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, scancode_push
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	ScanCodeInfo *struct {
 		ScanType   string `xml:"ScanType"   json:"ScanType"`   // 扫描类型, 一般是qrcode
@@ -79,7 +79,7 @@ type ScanCodeWaitMsgEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, scancode_waitmsg
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	ScanCodeInfo *struct {
 		ScanType   string `xml:"ScanType"   json:"ScanType"`   // 扫描类型, 一般是qrcode
@@ -101,7 +101,7 @@ type PicSysPhotoEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, pic_sysphoto
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	SendPicsInfo *struct {
 		Count   int `xml:"Count" json:"Count"`
@@ -125,7 +125,7 @@ type PicPhotoOrAlbumEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, pic_photo_or_album
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	SendPicsInfo *struct {
 		Count   int `xml:"Count" json:"Count"`
@@ -149,7 +149,7 @@ type PicWeixinEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, pic_weixin
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	SendPicsInfo *struct {
 		Count   int `xml:"Count" json:"Count"`
@@ -173,7 +173,7 @@ type LocationSelectEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	mp.MsgHeader
 	EventType mp.EventType `xml:"Event"    json:"Event"`    // 事件类型, location_select
-	EventKey  string         `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
+	EventKey  string       `xml:"EventKey" json:"EventKey"` // 事件KEY值, 由开发者在创建菜单时设定
 
 	SendLocationInfo *struct {
 		LocationX float64 `xml:"Location_X" json:"Location_X"` // 地理位置纬度

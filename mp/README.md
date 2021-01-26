@@ -1,15 +1,16 @@
 ### 回调请求的一般处理逻辑（一个回调地址处理一个公众号的消息和事件）
-```Go
+
+``` Go
 package main
 
 import (
 	"log"
 	"net/http"
 
-	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/mp/menu"
-	"github.com/micro-plat/wechat/mp/message/callback/request"
-	"github.com/micro-plat/wechat/mp/message/callback/response"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/lib4dev/wechat/mp/menu"
+	"github.com/lib4dev/wechat/mp/message/callback/request"
+	"github.com/lib4dev/wechat/mp/message/callback/response"
 )
 
 const (
@@ -83,14 +84,15 @@ func main() {
 ```
 
 ### 公众号api调用的一般处理逻辑
-```Go
+
+``` Go
 package main
 
 import (
 	"fmt"
 
-	"github.com/micro-plat/wechat/mp/base"
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp/base"
+	"github.com/lib4dev/wechat/mp"
 )
 
 const (

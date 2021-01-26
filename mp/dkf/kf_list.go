@@ -3,7 +3,7 @@ package dkf
 import (
 	"encoding/json"
 
-	"github.com/micro-plat/wechat/mp"
+	"github.com/lib4dev/wechat/mp"
 )
 
 // 客服基本信息

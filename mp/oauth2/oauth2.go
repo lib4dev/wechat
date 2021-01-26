@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/micro-plat/wechat/internal/debug/api"
-	"github.com/micro-plat/wechat/oauth2"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/internal/debug/api"
+	"github.com/lib4dev/wechat/oauth2"
+	"github.com/lib4dev/wechat/util"
 )
 
 type Token struct {
@@ -111,4 +111,3 @@ func AuthCode(appID, appSecret, code string, httpClient *http.Client) (info *Tok
 	info = &result.Token
 	return
 }
-

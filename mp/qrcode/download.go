@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/micro-plat/wechat/internal/debug/api"
-	"github.com/micro-plat/wechat/util"
+	"github.com/lib4dev/wechat/internal/debug/api"
+	"github.com/lib4dev/wechat/util"
 )
 
 // 二维码图片的URL, 可以通过此URL下载二维码 或者 在线显示此二维码.

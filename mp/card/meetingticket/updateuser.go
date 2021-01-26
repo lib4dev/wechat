@@ -1,6 +1,6 @@
 package meetingticket
 
-import "github.com/micro-plat/wechat/mp"
+import "github.com/lib4dev/wechat/mp"
 
 type UpdateUserParameters struct {
 	Code   string `json:"code"`              // 必须; 用户的门票唯一序列号

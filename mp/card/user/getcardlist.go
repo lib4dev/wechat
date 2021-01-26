@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/micro-plat/wechat/mp"
-	"github.com/micro-plat/wechat/mp/card/code"
+	"github.com/lib4dev/wechat/mp"
+	"github.com/lib4dev/wechat/mp/card/code"
 )
 
 // 获取用户已领取卡券接口
