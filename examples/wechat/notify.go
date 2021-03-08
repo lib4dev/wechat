@@ -5,6 +5,8 @@ import (
 	"github.com/micro-plat/hydra"
 )
 
-func orderNotify(conf *mch.PayConf, msg map[string]string, ctx hydra.IContext) {
-
+func notifyServeHandler(conf *mch.PayConf) func(ctx hydra.IContext) interface{} {
+	return func(ctx hydra.IContext) interface{} {
+		return "success"
+	}
 }

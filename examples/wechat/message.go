@@ -7,6 +7,17 @@ import (
 	"github.com/lib4dev/wechat/mp"
 )
 
+func recvMessageHandler(ctx hydra.IContext) mp.IMessageHandler {
+	return messageHandler(recvMessage)
+}
+
+type messageHandler func(cnf *mp.WConf, msg *mp.MixedMsg, ctx hydra.IContext) *mp.Reply
+
+func (h messageHandler) Handle(cnf *mp.WConf, msg *mp.MixedMsg, ctx hydra.IContext) *mp.Reply {
+	return h(cnf, msg, ctx)
+
+}
+
 //处理微信消息
 func recvMessage(cnf *mp.WConf, msg *mp.MixedMsg, ctx hydra.IContext) *mp.Reply {
 	switch msg.EventType {

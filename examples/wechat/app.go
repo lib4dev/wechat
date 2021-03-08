@@ -77,7 +77,7 @@ func bind(App *hydra.MicroApp) {
 				Token:          wx.Token,
 				EncodingAESKey: wx.EncodingAESKey,
 			}
-			App.Micro(wx.ServeURL, mp.NewMessageSeverHandler(ctx, recvMessage))
+			App.Micro(wx.ServeURL, mp.NewMessageSeverHandler(ctx, recvMessageHandler))
 			if !wx.EnablePayNotify {
 				continue
 			}
@@ -88,13 +88,13 @@ func bind(App *hydra.MicroApp) {
 				return err
 			}
 			pc := payConf.WX[i]
-			App.Micro(pc.PayNotifyURL, mch.NewNotifyServeHandler(mch.PayConf{
+			App.Micro(pc.PayNotifyURL, notifyServeHandler(&mch.PayConf{
 				AppId:    wx.AppID,
 				ApiKey:   pc.PayKey,
 				MchId:    pc.PayMchID,
 				SubAppId: pc.SubAppId,
 				SubMchId: pc.SubMchId,
-			}, orderNotify))
+			}))
 		}
 
 		return nil
